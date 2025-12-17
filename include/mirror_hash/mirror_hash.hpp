@@ -200,12 +200,20 @@ struct wyhash_policy {
         return wymix(k ^ wyp0, wyp1);
     }
 
-    // Final mixing for wyhash-style finalization
+    // Final mixing for wyhash-style finalization (2 multiplies - for compatibility)
     static constexpr std::size_t finalize(std::size_t seed, std::uint64_t a, std::uint64_t b, std::size_t len) noexcept {
         a ^= wyp1; b ^= seed;
         __uint128_t r = static_cast<__uint128_t>(a) * b;
         a = static_cast<std::uint64_t>(r); b = static_cast<std::uint64_t>(r >> 64);
         return wymix(a ^ wyp0 ^ len, b ^ wyp1);
+    }
+
+    // Fast finalization using SINGLE multiply (for sizes > 16B where seed has good entropy)
+    // Key insight: When seed has been through prior mixing, one 128-bit multiply provides
+    // sufficient avalanche. This saves one multiply compared to standard finalize().
+    static constexpr std::size_t finalize_fast(std::size_t seed, std::uint64_t a, std::uint64_t b, std::size_t len) noexcept {
+        __uint128_t r = static_cast<__uint128_t>(a ^ wyp0 ^ len) * (b ^ wyp1 ^ seed);
+        return static_cast<std::uint64_t>(r) ^ static_cast<std::uint64_t>(r >> 64);
     }
 };
 
@@ -748,6 +756,7 @@ template<std::size_t N>
         }
     }
     // ========== 17-48 bytes: process 16 bytes at a time ==========
+    // After combine16, seed has good entropy -> use fast single-multiply finalize
     else if constexpr (N <= 48) {
         if constexpr (N > 32) {
             seed = P::combine16(seed, read64<0>(p), read64<8>(p));
@@ -755,8 +764,8 @@ template<std::size_t N>
         } else if constexpr (N > 16) {
             seed = P::combine16(seed, read64<0>(p), read64<8>(p));
         }
-        // Final 16 bytes (overlapping)
-        return P::finalize(seed, read64<N-16>(p), read64<N-8>(p), N);
+        // Final 16 bytes (overlapping) - use fast finalize (1 multiply instead of 2)
+        return P::finalize_fast(seed, read64<N-16>(p), read64<N-8>(p), N);
     }
     // ========== 49-96 bytes: ULTRA OPTIMIZED with eager loading ==========
     // Key insight: Load ALL data upfront to maximize memory parallelism,
@@ -793,13 +802,17 @@ template<std::size_t N>
             seed = P::wymix(w8 ^ P::wyp1, w9 ^ seed);
         }
 
-        // Finalize with last 16 bytes
+        // Finalize with last 16 bytes - use pre-loaded values and fast finalize
         if constexpr (N > 80) {
-            return P::finalize(seed, w10, w11, N);
+            return P::finalize_fast(seed, w10, w11, N);
         } else if constexpr (N > 64) {
-            return P::finalize(seed, read64<N-16>(p), read64<N-8>(p), N);
+            return P::finalize_fast(seed, read64<N-16>(p), read64<N-8>(p), N);
+        } else if constexpr (N > 56) {
+            // For N in (56, 64], use pre-loaded w6, w7 (no re-reading!)
+            return P::finalize_fast(seed, w6, w7, N);
         } else {
-            return P::finalize(seed, read64<N-16>(p), read64<N-8>(p), N);
+            // For N in (48, 56], w7 may not be fully valid, use overlapping reads
+            return P::finalize_fast(seed, read64<N-16>(p), read64<N-8>(p), N);
         }
     }
     // ========== 97-128 bytes: WYHASH-STYLE 3-way parallel ==========
@@ -826,8 +839,8 @@ template<std::size_t N>
             seed = P::wymix(read64<96>(p) ^ P::wyp1, read64<104>(p) ^ seed);
         }
 
-        // Finalize with last 16 bytes
-        return P::finalize(seed, read64<N-16>(p), read64<N-8>(p), N);
+        // Finalize with last 16 bytes - use fast single-multiply finalize
+        return P::finalize_fast(seed, read64<N-16>(p), read64<N-8>(p), N);
     }
     // ========== 129-512 bytes: ULTRA OPTIMIZED 4-way parallel ==========
     // Key insight: 4 parallel accumulators (64 bytes/iter) beats 3-way (48 bytes/iter)
@@ -880,8 +893,8 @@ template<std::size_t N>
             seed = P::wymix(read64<processed>(p) ^ P::wyp1, read64<processed + 8>(p) ^ seed);
         }
 
-        // Finalize with last 16 bytes
-        return P::finalize(seed, read64<N-16>(p), read64<N-8>(p), N);
+        // Finalize with last 16 bytes - use fast single-multiply finalize
+        return P::finalize_fast(seed, read64<N-16>(p), read64<N-8>(p), N);
     }
     // ========== 513-1024 bytes: RAPIDHASH-STYLE 7-way loop ==========
     // 7-way parallelism matches rapidhash for optimal large-input performance
@@ -949,11 +962,11 @@ template<std::size_t N>
             remaining -= 16;
         }
 
-        // Finalize with last 16 bytes
+        // Finalize with last 16 bytes - use fast single-multiply finalize
         std::uint64_t a, b;
         __builtin_memcpy(&a, p + N - 16, 8);
         __builtin_memcpy(&b, p + N - 8, 8);
-        return P::finalize(seed, a, b, N);
+        return P::finalize_fast(seed, a, b, N);
     }
     // ========== 1025-4096 bytes: 7-WAY PARALLEL like rapidhash ==========
     // 7-way amortizes overhead better for very large inputs
@@ -1056,8 +1069,8 @@ template<std::size_t N>
             seed = P::wymix(read64<processed>(p) ^ s2, read64<processed + 8>(p) ^ seed);
         }
 
-        // Finalize
-        return P::finalize(seed, read64<N-16>(p), read64<N-8>(p), N);
+        // Finalize - use fast single-multiply finalize
+        return P::finalize_fast(seed, read64<N-16>(p), read64<N-8>(p), N);
     }
     // ========== Larger: runtime 7-way loop for very large sizes ==========
     else {
@@ -1130,11 +1143,11 @@ template<std::size_t N>
             remaining -= 16;
         }
 
-        // Final bytes
+        // Final bytes - use fast single-multiply finalize
         std::uint64_t a, b;
         __builtin_memcpy(&a, p + N - 16, 8);
         __builtin_memcpy(&b, p + N - 8, 8);
-        return P::finalize(seed, a, b, N);
+        return P::finalize_fast(seed, a, b, N);
     }
 }
 
