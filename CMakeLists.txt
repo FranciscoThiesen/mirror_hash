@@ -47,13 +47,6 @@ if(BUILD_BENCHMARKS)
     add_executable(quality_verification benchmarks/quality_verification.cpp)
     target_link_libraries(quality_verification PRIVATE mirror_hash)
 
-    # Optimization testing
-    add_executable(optimization_test benchmarks/optimization_test.cpp)
-    target_link_libraries(optimization_test PRIVATE mirror_hash)
-
-    # Micro variant testing
-    add_executable(micro_variant_test benchmarks/micro_variant_test.cpp)
-    target_link_libraries(micro_variant_test PRIVATE mirror_hash)
 endif()
 
 # Quality Analysis
