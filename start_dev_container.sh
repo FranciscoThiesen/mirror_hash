@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-CONTAINER_NAME="reflect_hash_dev"
-IMAGE_NAME="reflect_hash:latest"
+CONTAINER_NAME="mirror_hash_dev"
+IMAGE_NAME="mirror_hash:latest"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "=== reflect_hash Development Environment ==="
+echo "=== mirror_hash Development Environment ==="
 echo ""
 
 # Check if container already exists
@@ -27,40 +27,17 @@ fi
 if ! docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "^${IMAGE_NAME}$"; then
     echo "Image '${IMAGE_NAME}' not found."
     echo ""
-    echo "Options:"
-    echo "  1) Pull pre-built image from mirror_bridge (if available) [~2 min]"
-    echo "  2) Build from source (requires ~60 min and ~20GB disk)"
-    echo "  3) Use mirror_bridge container (recommended if you have it)"
+    echo "Building from source (requires ~60 min and ~20GB disk)..."
+    echo "This compiles LLVM/Clang with C++26 reflection support."
     echo ""
-    read -p "Choose option [1/2/3]: " choice
+    read -p "Continue? [y/N]: " choice
 
-    case $choice in
-        1)
-            echo "Attempting to use mirror_bridge image..."
-            if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "mirror_bridge"; then
-                # Tag the mirror_bridge image
-                docker tag mirror_bridge:latest ${IMAGE_NAME}
-                echo "Using mirror_bridge image"
-            else
-                echo "mirror_bridge image not found. Building from source..."
-                docker build -t ${IMAGE_NAME} ${SCRIPT_DIR}
-            fi
-            ;;
-        2)
-            echo "Building from source..."
-            docker build -t ${IMAGE_NAME} ${SCRIPT_DIR}
-            ;;
-        3)
-            echo "Using mirror_bridge container directly."
-            echo "Mount this directory and run:"
-            echo "  docker run -it -v ${SCRIPT_DIR}:/workspace/reflect_hash mirror_bridge:latest"
-            exit 0
-            ;;
-        *)
-            echo "Invalid option"
-            exit 1
-            ;;
-    esac
+    if [[ "$choice" =~ ^[Yy]$ ]]; then
+        docker build -t ${IMAGE_NAME} ${SCRIPT_DIR}
+    else
+        echo "Aborted."
+        exit 1
+    fi
 fi
 
 echo "Creating container '${CONTAINER_NAME}'..."

@@ -4,7 +4,7 @@ set -e
 BUILD_TYPE="${1:-Release}"
 BUILD_DIR="build"
 
-echo "=== Building reflect_hash (${BUILD_TYPE}) ==="
+echo "=== Building mirror_hash (${BUILD_TYPE}) ==="
 
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
@@ -21,6 +21,6 @@ echo ""
 echo "=== Build Complete ==="
 echo "Binaries in: ${BUILD_DIR}/"
 echo ""
-echo "Run tests:      ./build/test_reflect_hash"
-echo "Run benchmarks: ./build/benchmark_hash"
+echo "Run tests:      ./build/test_mirror_hash"
+echo "Run benchmarks: ./build/official_comparison"
 echo "Run examples:   ./build/example_basic"
