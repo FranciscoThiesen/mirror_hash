@@ -1,18 +1,18 @@
 #!/bin/bash
 set -e
 
-echo "=== Running reflect_hash Tests ==="
+echo "=== Running mirror_hash Tests ==="
 echo ""
 
-if [ ! -f "build/test_reflect_hash" ]; then
+if [ ! -f "build/test_mirror_hash" ]; then
     echo "Tests not built. Running build first..."
     ./build.sh
 fi
 
-./build/test_reflect_hash
+./build/test_mirror_hash
 
 echo ""
 echo "=== Running Benchmarks ==="
 echo ""
 
-./build/benchmark_hash
+./build/official_comparison
