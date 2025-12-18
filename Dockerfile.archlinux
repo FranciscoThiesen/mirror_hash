@@ -1,32 +1,30 @@
-# mirror_hash Development Container
+# mirror_hash Development Container (Arch Linux)
 # Builds clang-p2996 with C++26 reflection support
 #
-# Supports: x86_64 (Intel/AMD) and arm64 (Apple Silicon, ARM servers)
+# NOTE: This Dockerfile only works on x86_64 (Intel/AMD).
+#       For ARM64 (Apple Silicon), use the default Dockerfile (Ubuntu-based).
 #
 # Build time: ~60 minutes (compiling LLVM/Clang from source)
 # Disk space: ~20GB during build, ~5GB final image
 #
 # Usage:
-#   docker build -t mirror_hash:latest .
+#   docker build -f Dockerfile.archlinux -t mirror_hash:latest .
 #   docker run -it -v $(pwd):/workspace mirror_hash:latest
 
-FROM ubuntu:22.04
-
-# Avoid interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
+FROM archlinux:latest
 
 # Install essential build tools
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    ninja-build \
-    git \
-    wget \
-    ca-certificates \
-    python3 \
-    python3-pip \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
+RUN pacman -Syu --noconfirm && \
+    pacman -S --noconfirm \
+        base-devel \
+        cmake \
+        ninja \
+        git \
+        wget \
+        ca-certificates \
+        python \
+        vim && \
+    pacman -Scc --noconfirm
 
 # Build and install clang-p2996 with reflection support
 WORKDIR /opt
@@ -64,9 +62,9 @@ RUN cmake -G Ninja \
 # Clean up build artifacts to reduce image size
 RUN rm -rf /opt/clang-p2996
 
-# Configure library paths for both architectures
-# libc++ installs to architecture-specific directories
-ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib/aarch64-unknown-linux-gnu:/usr/local/lib/x86_64-unknown-linux-gnu:$LD_LIBRARY_PATH
+# Configure library paths
+RUN echo "/usr/local/lib" > /etc/ld.so.conf.d/libc++.conf && ldconfig
+ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib/x86_64-unknown-linux-gnu:$LD_LIBRARY_PATH
 
 # Verify <meta> header is installed and reflection works
 RUN echo '#include <meta>' > /tmp/test.cpp && \
