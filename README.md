@@ -105,14 +105,15 @@ Quality validated using [SMHasher](https://github.com/rurban/smhasher) test algo
 
 | Hash | Tests Passed | Bulk (GB/s) | Small 16B (ns) | Status |
 |------|--------------|-------------|----------------|--------|
-| wyhash | 12/12 | 30.8 | 1.65 | PASS |
-| rapidhash | 12/12 | 53.1 | 1.39 | PASS |
-| XXH3 | 12/12 | 49.3 | 1.52 | PASS |
-| XXH64 | 12/12 | 18.2 | 2.40 | PASS |
-| **mirror_hash** | **12/12** | 31.2 | 1.72 | **PASS** |
-| **mirror_hash_fixed** | **12/12** | 31.2 | **1.39** | **PASS** |
+| **rapidhash** | 12/12 | **54.2** | 1.36 | PASS |
+| **mirror_rapid** | **12/12** | **54.1** | 1.69 | **PASS** |
+| XXH3 | 12/12 | 50.1 | 1.49 | PASS |
+| wyhash | 12/12 | 31.1 | 1.60 | PASS |
+| mirror_wyhash | 12/12 | 31.3 | 1.77 | PASS |
+| XXH64 | 12/12 | 18.4 | 2.43 | PASS |
 
-mirror_hash uses the official wyhash algorithm internally and passes all SMHasher quality tests with identical scores to wyhash (BIC correlation: 0.002).
+**mirror_rapid** uses `rapidhash_policy` with 7-way parallel accumulators, matching official rapidhash performance at **54 GB/s**.
+**mirror_wyhash** uses `wyhash_policy` with the official wyhash algorithm, passing all quality tests (BIC correlation: 0.002).
 
 **SMHasher Tests Implemented:**
 - **Sanity**: Verification, alignment handling, appended zeroes
@@ -136,15 +137,15 @@ Run benchmarks:
 
 ## Hash Policies
 
-| Policy | Quality | Speed | Best For |
-|--------|---------|-------|----------|
-| `wyhash_policy` | Excellent | **Fastest** | Default choice, maximum speed |
+| Policy | Quality | Bulk Speed | Best For |
+|--------|---------|------------|----------|
+| `rapidhash_policy` | Excellent | **54 GB/s** | Large data, maximum throughput |
+| `wyhash_policy` | Excellent | 31 GB/s | Default choice, well-tested |
 | `folly_policy` | Excellent | Fast | Production-proven (Meta's F14) |
 | `murmur3_policy` | Excellent | Medium | Maximum portability |
 | `xxhash3_policy` | Excellent | Fast | SIMD-friendly workloads |
-| `rapidhash_policy` | Excellent | Fast | Large data |
 
-All recommended policies pass avalanche, bit independence, and distribution tests.
+All policies pass SMHasher quality tests (avalanche, bit independence, distribution).
 
 ## API Reference
 

@@ -576,13 +576,12 @@ int main() {
         {"rapidhash", [](const void* p, size_t len) { return rapidhash(p, len); }},
         {"XXH3", [](const void* p, size_t len) { return XXH3_64bits(p, len); }},
         {"XXH64", [](const void* p, size_t len) { return XXH64(p, len, 0); }},
-        {"mirror_hash", [](const void* p, size_t len) {
+        {"mirror_wyhash", [](const void* p, size_t len) {
             return mirror_hash::detail::hash_bytes<mirror_hash::wyhash_policy>(p, len);
         }},
-        {"mirror_hash_fixed", [](const void* p, size_t len) {
-            // Use compile-time optimized version for 16-byte keys
-            if (len == 16) return mirror_hash::detail::hash_bytes_fixed<mirror_hash::wyhash_policy, 16>(p);
-            return mirror_hash::detail::hash_bytes<mirror_hash::wyhash_policy>(p, len);
+        {"mirror_rapid", [](const void* p, size_t len) {
+            // Uses real rapidhash algorithm with 7-way parallel accumulators
+            return mirror_hash::detail::hash_bytes<mirror_hash::rapidhash_policy>(p, len);
         }},
     };
 
