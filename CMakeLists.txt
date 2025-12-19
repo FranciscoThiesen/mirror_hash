@@ -52,6 +52,11 @@ if(BUILD_BENCHMARKS)
     add_executable(quality_verification benchmarks/quality_verification.cpp)
     target_link_libraries(quality_verification PRIVATE mirror_hash)
 
+    # SMHasher test suite (actual SMHasher algorithms)
+    add_executable(smhasher_tests benchmarks/smhasher_tests.cpp)
+    target_link_libraries(smhasher_tests PRIVATE mirror_hash)
+    target_include_directories(smhasher_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
+
 endif()
 
 # Quality Analysis

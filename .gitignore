@@ -29,3 +29,6 @@ example_hashtable
 
 # Claude configuration (project-specific)
 CLAUDE.md
+
+# External repositories (cloned for integration attempts)
+smhasher_upstream/

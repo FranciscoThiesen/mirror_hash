@@ -99,28 +99,34 @@ Benchmarked against official implementations from their respective repositories 
 
 \* `mirror_hash*` uses compile-time size optimization (`hash_bytes_fixed<N>`)
 
-### Hash Quality (SMHasher-style)
+### Hash Quality (SMHasher Test Suite)
 
-Quality validated using tests based on [SMHasher](https://github.com/rurban/smhasher):
+Quality validated using [SMHasher](https://github.com/rurban/smhasher) test algorithms:
 
-| Hash | Score | Avalanche Bias | Assessment |
-|------|-------|----------------|------------|
-| mirror_hash | 9/10 | 0.039 | Excellent |
-| wyhash | 9/10 | 0.050 | Good |
-| rapidhash | 9/10 | 0.050 | Good |
-| XXH3 | 9/10 | 0.050 | Good |
-| XXH64 | 9/10 | 0.050 | Good |
-| FNV-1a | 7/10 | 0.120 | Poor (not recommended) |
+| Hash | Tests Passed | Bulk (GB/s) | Small 16B (ns) | Status |
+|------|--------------|-------------|----------------|--------|
+| wyhash | 12/12 | 30.4 | 1.68 | PASS |
+| rapidhash | 12/12 | 54.3 | 1.36 | PASS |
+| XXH3 | 12/12 | 49.9 | 1.49 | PASS |
+| XXH64 | 12/12 | 17.0 | 2.46 | PASS |
+| mirror_hash | 11/12 | 27.5 | 4.41 | * |
+| mirror_hash_fixed | 11/12 | 27.2 | **1.29** | * |
 
-**Quality Tests Performed:**
+\* mirror_hash marginally fails the BIC (Bit Independence Criterion) test with a correlation of 0.109 vs the strict 0.1 threshold. All other quality tests pass. This has minimal practical impact for hash table usage.
+
+**SMHasher Tests Implemented:**
+- **Sanity**: Verification, alignment handling, appended zeroes
 - **Avalanche** (SAC): Each input bit flip should change ~50% of output bits
 - **Bit Independence** (BIC): Output bit changes should be uncorrelated
-- **Chi-Squared**: Hash values should be uniformly distributed
-- **Collision**: Collision rate should match birthday paradox expectation
+- **Keyset**: Sparse, permutation, cyclic, and text patterns
 - **Differential**: Sequential/related inputs should produce uncorrelated outputs
-- **Sparse Keys**: Inputs with few bits set should not collide
+- **Collision**: Birthday paradox collision rate validation
+- **Distribution**: Chi-squared uniformity test
 
-See [analysis/QUALITY_TESTS.md](analysis/QUALITY_TESTS.md) for detailed methodology.
+Run the SMHasher test suite:
+```bash
+./build/smhasher_tests
+```
 
 Run benchmarks:
 ```bash
