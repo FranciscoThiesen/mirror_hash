@@ -69,34 +69,63 @@ ninja
 
 ## Performance
 
-mirror_hash is benchmarked against official implementations of industry-standard hash functions:
-
-- **wyhash v4.2**: Default hash in Go, Zig, Nim
-- **rapidhash V3**: Optimized variant of wyhash
-- **xxHash 0.8.3**: Widely used fast hash
-- **clhash**: CLMUL-based hash (x86 only)
+Benchmarked against official implementations from their respective repositories using methodology inspired by [xxHash](https://github.com/Cyan4973/xxHash).
 
 ### Benchmark Results
 
-Using `mirror_hash_fixed` (compile-time size optimization) vs best competitor:
+**Test Environment:** ARM64 (Apple Silicon), Clang 21 with P2996, `-O3 -march=native`
 
-| Size | mirror_hash | Best Competitor | Result |
-|------|-------------|-----------------|--------|
-| 8B | 0.49ns | rapidhash 0.56ns | **+15%** |
-| 16B | 0.47ns | rapidhash 0.62ns | **+32%** |
-| 32B | 0.76ns | wyhash 0.93ns | **+22%** |
-| 64B | 1.37ns | wyhash 1.61ns | **+17%** |
-| 96B | 2.18ns | wyhash 2.55ns | **+17%** |
-| 128B | 2.65ns | wyhash 2.94ns | **+11%** |
-| 256B | 5.84ns | rapidhash 6.28ns | **+8%** |
-| 512B | 11.40ns | rapidhash 11.79ns | **+3%** |
-| 1024B | 20.63ns | rapidhash 21.61ns | **+5%** |
+#### Throughput (GB/s, higher = better)
 
-**Summary**: Wins on ALL 9 sizes tested, with significant margins on medium sizes.
+| Hash | Width | Bulk 256KB | 64B | 16B | Notes |
+|------|-------|------------|-----|-----|-------|
+| **mirror_hash*** | 64 | **54.1** | **32.7** | 8.0 | Compile-time size |
+| rapidhash | 64 | 54.0 | 21.9 | 8.2 | |
+| XXH3 | 64 | 48.6 | 18.5 | 8.0 | |
+| wyhash | 64 | 30.3 | 21.6 | 7.9 | Go/Zig/Nim default |
+| XXH64 | 64 | 16.6 | 9.7 | 5.2 | |
+| mirror_hash | 64 | 27.1 | 9.6 | 3.3 | Runtime size |
+| FNV-1a | 64 | 0.9 | 1.4 | 2.5 | Poor quality |
+
+#### Small Data Latency (ns/hash, lower = better)
+
+| Hash | 8B | 16B | 32B | 64B | 256B |
+|------|-----|------|------|------|------|
+| **mirror_hash*** | 1.99 | **1.49** | **1.98** | **1.81** | **5.71** |
+| rapidhash | 1.99 | 2.00 | 2.50 | 2.92 | 7.52 |
+| wyhash | 2.03 | 2.00 | 2.15 | 3.03 | 7.26 |
+| XXH3 | 2.03 | 1.96 | 2.40 | 3.36 | 9.15 |
+| XXH64 | 2.75 | 3.06 | 5.20 | 6.45 | 17.47 |
+
+\* `mirror_hash*` uses compile-time size optimization (`hash_bytes_fixed<N>`)
+
+### Hash Quality (SMHasher-style)
+
+Quality validated using tests based on [SMHasher](https://github.com/rurban/smhasher):
+
+| Hash | Score | Avalanche Bias | Assessment |
+|------|-------|----------------|------------|
+| mirror_hash | 9/10 | 0.039 | Excellent |
+| wyhash | 9/10 | 0.050 | Good |
+| rapidhash | 9/10 | 0.050 | Good |
+| XXH3 | 9/10 | 0.050 | Good |
+| XXH64 | 9/10 | 0.050 | Good |
+| FNV-1a | 7/10 | 0.120 | Poor (not recommended) |
+
+**Quality Tests Performed:**
+- **Avalanche** (SAC): Each input bit flip should change ~50% of output bits
+- **Bit Independence** (BIC): Output bit changes should be uncorrelated
+- **Chi-Squared**: Hash values should be uniformly distributed
+- **Collision**: Collision rate should match birthday paradox expectation
+- **Differential**: Sequential/related inputs should produce uncorrelated outputs
+- **Sparse Keys**: Inputs with few bits set should not collide
+
+See [analysis/QUALITY_TESTS.md](analysis/QUALITY_TESTS.md) for detailed methodology.
 
 Run benchmarks:
 ```bash
-./build/official_comparison
+./build/comprehensive_benchmark  # Full benchmark suite
+./build/official_comparison      # Quick comparison
 ```
 
 ## Hash Policies

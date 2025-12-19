@@ -39,6 +39,11 @@ if(BUILD_BENCHMARKS)
     target_link_libraries(official_comparison PRIVATE mirror_hash)
     target_include_directories(official_comparison PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 
+    # Comprehensive benchmark (xxHash-style presentation)
+    add_executable(comprehensive_benchmark benchmarks/comprehensive_benchmark.cpp)
+    target_link_libraries(comprehensive_benchmark PRIVATE mirror_hash)
+    target_include_directories(comprehensive_benchmark PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
+
     # Policy comparison between different hash algorithms
     add_executable(policy_comparison benchmarks/policy_comparison.cpp)
     target_link_libraries(policy_comparison PRIVATE mirror_hash)
