@@ -418,6 +418,95 @@ using default_policy = folly_policy;
 
 namespace detail {
 
+// ============================================================================
+// Real wyhash implementation for hash_bytes specialization
+// From https://github.com/wangyi-fudan/wyhash (public domain)
+// This ensures 100% compatibility with wyhash quality tests
+// ============================================================================
+
+namespace wyhash_impl {
+
+// Secrets matching official wyhash
+static constexpr std::uint64_t secret0 = 0x2d358dccaa6c78a5ull;
+static constexpr std::uint64_t secret1 = 0x8bb84b93962eacc9ull;
+static constexpr std::uint64_t secret2 = 0x4b33a62ed433d4a3ull;
+static constexpr std::uint64_t secret3 = 0x4d5a2da51de1aa47ull;
+
+inline void wymum(std::uint64_t* A, std::uint64_t* B) noexcept {
+    __uint128_t r = static_cast<__uint128_t>(*A) * (*B);
+    *A = static_cast<std::uint64_t>(r);
+    *B = static_cast<std::uint64_t>(r >> 64);
+}
+
+inline std::uint64_t wymix(std::uint64_t A, std::uint64_t B) noexcept {
+    wymum(&A, &B);
+    return A ^ B;
+}
+
+inline std::uint64_t wyr8(const std::uint8_t* p) noexcept {
+    std::uint64_t v;
+    __builtin_memcpy(&v, p, 8);
+    return v;
+}
+
+inline std::uint64_t wyr4(const std::uint8_t* p) noexcept {
+    std::uint32_t v;
+    __builtin_memcpy(&v, p, 4);
+    return v;
+}
+
+inline std::uint64_t wyr3(const std::uint8_t* p, std::size_t k) noexcept {
+    return (static_cast<std::uint64_t>(p[0]) << 16) |
+           (static_cast<std::uint64_t>(p[k >> 1]) << 8) |
+           p[k - 1];
+}
+
+// Full wyhash algorithm (matches official implementation exactly)
+inline std::uint64_t wyhash(const void* key, std::size_t len, std::uint64_t seed = 0) noexcept {
+    const auto* p = static_cast<const std::uint8_t*>(key);
+    seed ^= wymix(seed ^ secret0, secret1);
+    std::uint64_t a, b;
+
+    if (len <= 16) {
+        if (len >= 4) {
+            a = (wyr4(p) << 32) | wyr4(p + ((len >> 3) << 2));
+            b = (wyr4(p + len - 4) << 32) | wyr4(p + len - 4 - ((len >> 3) << 2));
+        } else if (len > 0) {
+            a = wyr3(p, len);
+            b = 0;
+        } else {
+            a = b = 0;
+        }
+    } else {
+        std::size_t i = len;
+        if (i >= 48) {
+            std::uint64_t see1 = seed, see2 = seed;
+            do {
+                seed = wymix(wyr8(p) ^ secret1, wyr8(p + 8) ^ seed);
+                see1 = wymix(wyr8(p + 16) ^ secret2, wyr8(p + 24) ^ see1);
+                see2 = wymix(wyr8(p + 32) ^ secret3, wyr8(p + 40) ^ see2);
+                p += 48;
+                i -= 48;
+            } while (i >= 48);
+            seed ^= see1 ^ see2;
+        }
+        while (i > 16) {
+            seed = wymix(wyr8(p) ^ secret1, wyr8(p + 8) ^ seed);
+            i -= 16;
+            p += 16;
+        }
+        a = wyr8(p + i - 16);
+        b = wyr8(p + i - 8);
+    }
+
+    a ^= secret1;
+    b ^= seed;
+    wymum(&a, &b);
+    return wymix(a ^ secret0 ^ len, b ^ secret1);
+}
+
+} // namespace wyhash_impl
+
 // Scalar implementation (fallback)
 template<typename Policy>
 inline std::size_t hash_bytes_scalar(const void* data, std::size_t len) noexcept {
@@ -693,14 +782,25 @@ template<typename Policy>
 }
 
 // ============================================================================
-// Wyhash-optimized: 16 bytes per mix (matching real wyhash algorithm)
+// Wyhash-optimized: Uses REAL wyhash algorithm for compile-time sizes
 // ============================================================================
-// Real wyhash processes 16 bytes per wymix: wymix(a ^ secret, b ^ seed)
-// This is more efficient than our generic 8-bytes-per-combine approach.
+// This ensures 100% compatibility with wyhash quality tests (SMHasher).
+// Uses the official wyhash algorithm from wyhash_impl namespace.
 // ============================================================================
 
 template<std::size_t N>
 [[gnu::always_inline]] inline std::size_t hash_bytes_wyhash_optimized(const void* data) noexcept {
+    // Use the real wyhash implementation for all sizes
+    // This guarantees identical results to official wyhash and passes all SMHasher tests
+    return wyhash_impl::wyhash(data, N);
+}
+
+// Legacy optimized paths kept for reference but now bypassed in favor of real wyhash
+// The real wyhash implementation is well-optimized and passes all quality tests
+namespace legacy_wyhash_optimized {
+
+template<std::size_t N>
+[[gnu::always_inline]] inline std::size_t hash_bytes_wyhash_legacy(const void* data) noexcept {
     const auto* p = static_cast<const std::uint8_t*>(data);
     using P = wyhash_policy;
 
@@ -1151,6 +1251,8 @@ template<std::size_t N>
     }
 }
 
+} // namespace legacy_wyhash_optimized
+
 template<typename Policy, std::size_t N>
 [[gnu::always_inline]] inline std::size_t hash_bytes_fixed(const void* data) noexcept {
     // Use wyhash-optimized path for wyhash_policy - now supports up to 4KB
@@ -1586,6 +1688,13 @@ inline std::size_t hash_bytes(const void* data, std::size_t len) noexcept {
 #else
     return hash_bytes_scalar<Policy>(data, len);
 #endif
+}
+
+// Specialization for wyhash_policy: use the real wyhash algorithm
+// This ensures 100% compatibility with wyhash quality tests (SMHasher)
+template<>
+inline std::size_t hash_bytes<wyhash_policy>(const void* data, std::size_t len) noexcept {
+    return wyhash_impl::wyhash(data, len);
 }
 
 // Check if a type can be hashed as raw bytes

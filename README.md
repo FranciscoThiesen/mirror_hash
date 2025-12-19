@@ -105,14 +105,14 @@ Quality validated using [SMHasher](https://github.com/rurban/smhasher) test algo
 
 | Hash | Tests Passed | Bulk (GB/s) | Small 16B (ns) | Status |
 |------|--------------|-------------|----------------|--------|
-| wyhash | 12/12 | 30.4 | 1.68 | PASS |
-| rapidhash | 12/12 | 54.3 | 1.36 | PASS |
-| XXH3 | 12/12 | 49.9 | 1.49 | PASS |
-| XXH64 | 12/12 | 17.0 | 2.46 | PASS |
-| mirror_hash | 11/12 | 27.5 | 4.41 | * |
-| mirror_hash_fixed | 11/12 | 27.2 | **1.29** | * |
+| wyhash | 12/12 | 30.8 | 1.65 | PASS |
+| rapidhash | 12/12 | 53.1 | 1.39 | PASS |
+| XXH3 | 12/12 | 49.3 | 1.52 | PASS |
+| XXH64 | 12/12 | 18.2 | 2.40 | PASS |
+| **mirror_hash** | **12/12** | 31.2 | 1.72 | **PASS** |
+| **mirror_hash_fixed** | **12/12** | 31.2 | **1.39** | **PASS** |
 
-\* mirror_hash marginally fails the BIC (Bit Independence Criterion) test with a correlation of 0.109 vs the strict 0.1 threshold. All other quality tests pass. This has minimal practical impact for hash table usage.
+mirror_hash uses the official wyhash algorithm internally and passes all SMHasher quality tests with identical scores to wyhash (BIC correlation: 0.002).
 
 **SMHasher Tests Implemented:**
 - **Sanity**: Verification, alignment handling, appended zeroes
