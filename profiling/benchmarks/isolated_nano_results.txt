@@ -1,0 +1,87 @@
+=== Compiling ISOLATED benchmarks (one hash per binary) ===
+
+=== mh_nano (isolated) ===
+=== ISOLATED mh_nano BENCHMARK ===
+
+      Size          Time
+      ----          ----
+        1B        1.40ns
+        2B        1.40ns
+        3B        1.40ns
+        4B        1.31ns
+        5B        1.35ns
+        6B        1.33ns
+        7B        1.33ns
+        8B        1.37ns
+       10B        1.40ns
+       12B        1.37ns
+       14B        1.37ns
+       16B        1.37ns
+       17B        1.67ns
+       20B        1.64ns
+       24B        1.71ns
+       28B        1.67ns
+       32B        1.67ns
+       33B        2.04ns
+       40B        2.07ns
+       48B        2.01ns
+       49B        3.02ns
+       56B        3.42ns
+       64B        3.30ns
+       72B        3.88ns
+       80B        3.10ns
+       81B        3.86ns
+       96B        3.88ns
+      112B        4.00ns
+      128B        5.04ns
+      160B        5.49ns
+      192B        6.41ns
+      224B        7.27ns
+      256B        7.99ns
+      384B       11.98ns
+      512B       16.07ns
+      768B       24.92ns
+       1KB       32.59ns
+
+=== rapidNano (isolated) ===
+=== ISOLATED rapidNano BENCHMARK ===
+
+      Size          Time
+      ----          ----
+        1B        1.39ns
+        2B        1.40ns
+        3B        1.39ns
+        4B        1.31ns
+        5B        1.32ns
+        6B        1.32ns
+        7B        1.31ns
+        8B        1.36ns
+       10B        1.36ns
+       12B        1.36ns
+       14B        1.36ns
+       16B        1.37ns
+       17B        1.63ns
+       20B        1.63ns
+       24B        1.64ns
+       28B        1.64ns
+       32B        1.64ns
+       33B        2.02ns
+       40B        2.04ns
+       48B        2.04ns
+       49B        2.77ns
+       56B        2.77ns
+       64B        2.75ns
+       72B        3.09ns
+       80B        3.12ns
+       81B        3.55ns
+       96B        3.56ns
+      112B        3.93ns
+      128B        4.41ns
+      160B        5.31ns
+      192B        6.49ns
+      224B        7.26ns
+      256B        8.03ns
+      384B       12.07ns
+      512B       16.23ns
+      768B       25.34ns
+       1KB       32.92ns

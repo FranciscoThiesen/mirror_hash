@@ -1,0 +1,32 @@
+=== mirror_hash Struct Benchmark ===
+Date: 2025-12-27
+Platform: x86_64 (Docker with clang-p2996, emulated on M3 Max)
+Compiler: Clang 21 (Bloomberg clang-p2996)
+Flags: -std=c++2c -freflection -freflection-latest -stdlib=libc++ -O3
+Iterations: 5,000,000 per test
+
+Results:
+---------
+Point{int, int}:           0.45 ns  (trivially copyable, raw bytes)
+Person{string(5), int}:    4.63 ns  (SSO string, inline storage)
+Person{string(16), int}:   4.52 ns  (SSO borderline, still inline)
+Person{string(32), int}:   6.10 ns  (heap-allocated, pointer chase)
+Data{vector(5), string}:   8.22 ns  (5 element iteration)
+Data{vector(100), string}: 20.42 ns (100 element iteration)
+
+Ratios:
+-------
+string(32) / string(5) = 1.32x (heap string ~32% slower than SSO)
+vector(100) / vector(5) = 2.48x (100 elements ~2.5x slower)
+
+SSO Info (libc++):
+------------------
+string(5) capacity: 22 (fits in SSO buffer)
+string(32) capacity: 39 (heap allocated)
+
+Notes:
+------
+- These are REAL benchmarks, not estimates
+- SSO threshold on libc++ is ~22 chars
+- Heap-allocated strings incur pointer chase overhead
+- Vector iteration scales sub-linearly due to fixed overhead

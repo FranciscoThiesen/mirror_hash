@@ -1,0 +1,82 @@
+Unable to find image 'ubuntu:22.04' locally
+22.04: Pulling from library/ubuntu
+Digest: sha256:104ae83764a5119017b8e8d6218fa0832b09df65aae7d5a6de29a85d813da2fb
+Status: Downloaded newer image for ubuntu:22.04
+=======================================================================
+COMPREHENSIVE BENCHMARK: mirror_hash v2 vs rapidhash
+=======================================================================
+
+Platform: x86_64 (no AES-NI)
+mirror_hash capabilities: AES=NO, ARM64=NO, x64=YES
+
+Size     Category    rapidhash  mirror_hash      Speedup     Status
+----     --------    ---------  -----------      -------     ------
+4        SMALL          3.63 ns       4.10 ns      -11.5%  RAPID WINS
+8        SMALL          3.43 ns       4.06 ns      -15.4%  RAPID WINS
+16       SMALL          3.44 ns       4.06 ns      -15.2%  RAPID WINS
+24       TRANS          3.69 ns       4.21 ns      -12.4%  RAPID WINS
+32       TRANS          3.57 ns       4.19 ns      -14.7%  RAPID WINS
+48       MEDIUM         4.11 ns       4.81 ns      -14.4%  RAPID WINS
+64       MEDIUM         5.11 ns       5.36 ns       -4.6%       ~EVEN
+96       MEDIUM         5.39 ns       5.77 ns       -6.5%       ~EVEN
+128      MEDIUM         6.24 ns       6.49 ns       -3.9%       ~EVEN
+192      MEDIUM         7.46 ns       7.75 ns       -3.7%       ~EVEN
+256      MEDIUM         8.81 ns       9.15 ns       -3.7%       ~EVEN
+384      MEDIUM        12.27 ns      12.50 ns       -1.9%       ~EVEN
+512      MEDIUM        14.43 ns      14.81 ns       -2.5%       ~EVEN
+768      MEDIUM        24.17 ns      24.45 ns       -1.1%       ~EVEN
+1024     MEDIUM        28.76 ns      29.08 ns       -1.1%       ~EVEN
+2048     LARGE         55.05 ns      55.20 ns       -0.3%       ~EVEN
+4096     LARGE        107.11 ns     107.26 ns       -0.1%       ~EVEN
+8192     LARGE        210.98 ns     211.59 ns       -0.3%       ~EVEN
+
+=======================================================================
+STATISTICAL DETAILS (key sizes)
+=======================================================================
+
+Size: 8 bytes
+  rapidhash:   median=3.34 ns, min=3.22, max=3.40, stddev=0.045
+  mirror_hash: median=3.49 ns, min=3.41, max=3.58, stddev=0.040
+  Checksum verification: rapid=0000000000000000, mirror=0000000000000000
+
+Size: 64 bytes
+  rapidhash:   median=5.10 ns, min=5.07, max=5.28, stddev=0.067
+  mirror_hash: median=4.76 ns, min=4.53, max=5.09, stddev=0.136
+  Checksum verification: rapid=0000000000000000, mirror=0000000000000000
+
+Size: 256 bytes
+  rapidhash:   median=8.81 ns, min=8.77, max=9.14, stddev=0.082
+  mirror_hash: median=8.81 ns, min=8.76, max=9.34, stddev=0.139
+  Checksum verification: rapid=0000000000000000, mirror=0000000000000000
+
+Size: 512 bytes
+  rapidhash:   median=14.54 ns, min=14.50, max=14.81, stddev=0.078
+  mirror_hash: median=14.54 ns, min=14.49, max=15.45, stddev=0.243
+  Checksum verification: rapid=0000000000000000, mirror=0000000000000000
+
+Size: 1024 bytes
+  rapidhash:   median=28.74 ns, min=28.65, max=30.50, stddev=0.404
+  mirror_hash: median=28.51 ns, min=28.40, max=33.18, stddev=1.106
+  Checksum verification: rapid=0000000000000000, mirror=0000000000000000
+
+=======================================================================
+HASH VALUE VERIFICATION
+=======================================================================
+
+Input: "Hello, World! This is a test string for hash verification." (58 bytes)
+  rapidhash:   36e9dfd2c4e32a50
+  mirror_hash: 36e9dfd2c4e32a50
+  (Should match - mirror_hash falls back to rapidhash without AES)
+
+Avalanche test (flip 1 bit in input):
+  rapidhash bits changed:   25/64
+  mirror_hash bits changed: 25/64
+  (Both should be ~32 for good avalanche)
+
+=======================================================================
+SUMMARY
+=======================================================================
+
+Without AES crypto extensions:
+  - Falls back to rapidhash for all sizes
+  - No performance advantage over rapidhash

@@ -1,0 +1,83 @@
+=== Comprehensive Hash Comparison (All Sizes) ===
+Trials: 30, reporting median time in nanoseconds
+All functions pass SMHasher quality tests.
+
+Size             mirror_v1       mirror_v2       rapidhash  rapidhashMicro   rapidhashNano            Best  Winner
+----        --------------  --------------  --------------  --------------  --------------  --------------  ------
+       1B          2.55 ns         2.56 ns         3.41 ns         3.41 ns         2.55 ns         2.55 ns  rapidhashNano (-0.1%)
+       2B          2.55 ns         2.57 ns         3.39 ns         3.42 ns         2.56 ns         2.55 ns  mirror_hash
+       3B          2.55 ns         2.54 ns         3.40 ns         3.38 ns         2.55 ns         2.54 ns  mirror_v2 (-0.4%)
+       4B          2.43 ns         2.41 ns         3.48 ns         3.41 ns         2.42 ns         2.41 ns  mirror_v2 (-0.8%)
+       5B          2.41 ns         2.41 ns         3.47 ns         3.41 ns         2.41 ns         2.41 ns  rapidhashNano (-0.1%)
+       6B          2.42 ns         2.41 ns         3.46 ns         3.45 ns         2.42 ns         2.41 ns  mirror_v2 (-0.4%)
+       7B          2.45 ns         2.44 ns         3.49 ns         3.43 ns         2.44 ns         2.44 ns  rapidhashNano (-0.5%)
+       8B          2.48 ns         2.49 ns         3.51 ns         3.47 ns         2.48 ns         2.48 ns  rapidhashNano (-0.1%)
+      10B          2.47 ns         2.47 ns         3.50 ns         3.48 ns         2.47 ns         2.47 ns  mirror_hash
+      12B          2.45 ns         2.45 ns         3.48 ns         3.46 ns         2.45 ns         2.45 ns  rapidhashNano (-0.3%)
+      14B          2.47 ns         2.46 ns         3.47 ns         3.48 ns         2.46 ns         2.46 ns  mirror_v2 (-0.3%)
+      16B          2.49 ns         2.50 ns         3.49 ns         3.53 ns         2.50 ns         2.49 ns  mirror_hash
+      17B          2.76 ns         2.76 ns         3.87 ns         3.92 ns         2.94 ns         2.76 ns  mirror_hash
+      20B          2.77 ns         2.76 ns         3.92 ns         3.86 ns         2.95 ns         2.76 ns  mirror_v2 (-0.4%)
+      24B          2.76 ns         2.77 ns         3.85 ns         3.81 ns         2.95 ns         2.76 ns  mirror_hash
+      28B          2.78 ns         2.80 ns         3.76 ns         3.69 ns         2.98 ns         2.78 ns  mirror_hash
+      32B          2.77 ns         2.77 ns         3.83 ns         3.67 ns         2.94 ns         2.77 ns  mirror_hash
+      33B          3.11 ns         3.13 ns         3.63 ns         3.54 ns         3.16 ns         3.11 ns  mirror_hash
+      40B          3.10 ns         3.11 ns         3.52 ns         3.49 ns         3.13 ns         3.10 ns  mirror_hash
+      48B          3.08 ns         3.11 ns         3.52 ns         3.48 ns         3.15 ns         3.08 ns  mirror_hash
+      49B          3.98 ns         3.58 ns         3.78 ns         3.77 ns         3.95 ns         3.58 ns  mirror_v2 (-11.2%)
+      56B          3.96 ns         3.57 ns         3.77 ns         3.77 ns         3.98 ns         3.57 ns  mirror_v2 (-11.1%)
+      64B          3.97 ns         3.57 ns         3.76 ns         3.80 ns         3.95 ns         3.57 ns  mirror_v2 (-11.1%)
+      72B          4.46 ns         4.31 ns         4.27 ns         4.25 ns         4.31 ns         4.25 ns  rapidhashMicro (-4.9%)
+      80B          4.53 ns         4.34 ns         4.24 ns         4.28 ns         4.35 ns         4.24 ns  rapidhash (-6.8%)
+      81B          5.15 ns         5.09 ns         5.01 ns         5.10 ns         4.75 ns         4.75 ns  rapidhashNano (-8.3%)
+      96B          5.13 ns         5.08 ns         4.97 ns         5.10 ns         4.69 ns         4.69 ns  rapidhashNano (-9.5%)
+     112B          5.49 ns         5.61 ns         5.63 ns         5.43 ns         4.96 ns         4.96 ns  rapidhashNano (-10.8%)
+     128B          5.84 ns         5.91 ns         6.18 ns         5.84 ns         5.33 ns         5.33 ns  rapidhashNano (-9.5%)
+     160B          7.12 ns         6.40 ns         6.76 ns         7.03 ns         6.06 ns         6.06 ns  rapidhashNano (-17.5%)
+     192B          7.37 ns         7.19 ns         8.08 ns         7.19 ns         7.13 ns         7.13 ns  rapidhashNano (-3.3%)
+     224B          8.41 ns         7.88 ns         9.54 ns         8.25 ns         7.94 ns         7.88 ns  mirror_v2 (-6.8%)
+     256B          8.56 ns         8.68 ns         9.01 ns         8.29 ns         8.58 ns         8.29 ns  rapidhashMicro (-3.3%)
+     384B         12.23 ns        12.12 ns        12.25 ns        11.92 ns        12.40 ns        11.92 ns  rapidhashMicro (-2.6%)
+     512B         14.21 ns        14.32 ns        15.40 ns        13.71 ns        16.07 ns        13.71 ns  rapidhashMicro (-3.6%)
+     768B         20.42 ns        20.41 ns        23.39 ns        19.84 ns        24.15 ns        19.84 ns  rapidhashMicro (-2.9%)
+      1KB         27.03 ns        26.62 ns        27.73 ns        26.03 ns        31.53 ns        26.03 ns  rapidhashMicro (-3.8%)
+      2KB         48.01 ns        47.79 ns        51.83 ns        46.27 ns        63.92 ns        46.27 ns  rapidhashMicro (-3.8%)
+      4KB         91.66 ns        92.08 ns       101.17 ns        87.64 ns       131.59 ns        87.64 ns  rapidhashMicro (-4.6%)
+      8KB        180.08 ns       179.78 ns       198.54 ns       174.23 ns       265.66 ns       174.23 ns  rapidhashMicro (-3.4%)
+     16KB        360.28 ns       363.15 ns       401.77 ns       340.96 ns       533.85 ns       340.96 ns  rapidhashMicro (-5.7%)
+     32KB        716.46 ns       717.12 ns       792.72 ns       670.12 ns      1071.78 ns       670.12 ns  rapidhashMicro (-6.9%)
+     64KB       1422.47 ns      1421.30 ns      1578.91 ns      1331.44 ns      2167.45 ns      1331.44 ns  rapidhashMicro (-6.8%)
+    128KB       2878.44 ns      2868.02 ns      3183.08 ns      2778.94 ns      4371.48 ns      2778.94 ns  rapidhashMicro (-3.6%)
+    256KB       6164.08 ns      6217.83 ns      6530.35 ns      5936.94 ns      8814.10 ns      5936.94 ns  rapidhashMicro (-3.8%)
+    512KB      12064.79 ns     12134.23 ns     12741.60 ns     11549.40 ns     17645.96 ns     11549.40 ns  rapidhashMicro (-4.5%)
+      1MB      24332.29 ns     24355.79 ns     26167.19 ns     23099.33 ns     35462.35 ns     23099.33 ns  rapidhashMicro (-5.3%)
+
+
+=== Throughput Summary (bytes/ns, higher = better) ===
+Size           mirror_v1     mirror_v2     rapidhash  rapidhashMicro  rapidhashNano
+----        ------------  ------------  ------------  ------------  ------------
+      64B      16.031 B/ns     17.774 B/ns     16.717 B/ns     16.839 B/ns     16.082 B/ns
+      72B      16.044 B/ns     16.474 B/ns     16.953 B/ns     16.874 B/ns     16.707 B/ns
+      80B      18.119 B/ns     18.557 B/ns     18.981 B/ns     18.975 B/ns     18.678 B/ns
+      81B      15.658 B/ns     15.950 B/ns     16.100 B/ns     15.885 B/ns     17.006 B/ns
+      96B      18.723 B/ns     18.888 B/ns     19.353 B/ns     18.836 B/ns     20.250 B/ns
+     112B      20.380 B/ns     19.882 B/ns     20.001 B/ns     20.644 B/ns     22.671 B/ns
+     128B      21.736 B/ns     21.800 B/ns     20.745 B/ns     21.899 B/ns     24.013 B/ns
+     160B      22.111 B/ns     24.698 B/ns     23.434 B/ns     22.741 B/ns     26.422 B/ns
+     192B      26.174 B/ns     26.660 B/ns     23.950 B/ns     27.133 B/ns     27.189 B/ns
+     224B      26.626 B/ns     28.571 B/ns     23.602 B/ns     27.280 B/ns     28.505 B/ns
+     256B      29.752 B/ns     29.350 B/ns     28.320 B/ns     30.797 B/ns     29.708 B/ns
+     384B      31.620 B/ns     31.819 B/ns     31.562 B/ns     32.416 B/ns     31.341 B/ns
+     512B      35.750 B/ns     35.539 B/ns     33.093 B/ns     37.030 B/ns     31.563 B/ns
+     768B      37.672 B/ns     37.784 B/ns     33.086 B/ns     38.832 B/ns     31.835 B/ns
+      1KB      38.131 B/ns     38.210 B/ns     36.829 B/ns     39.518 B/ns     32.658 B/ns
+      2KB      42.400 B/ns     42.788 B/ns     39.445 B/ns     44.416 B/ns     32.101 B/ns
+      4KB      44.723 B/ns     44.495 B/ns     40.355 B/ns     46.597 B/ns     31.091 B/ns
+      8KB      45.435 B/ns     45.609 B/ns     39.969 B/ns     46.846 B/ns     30.967 B/ns
+     16KB      45.161 B/ns     45.335 B/ns     40.883 B/ns     48.149 B/ns     30.592 B/ns
+     32KB      45.698 B/ns     45.848 B/ns     41.289 B/ns     48.828 B/ns     30.482 B/ns
+     64KB      46.035 B/ns     45.914 B/ns     41.443 B/ns     49.252 B/ns     30.197 B/ns
+    128KB      45.544 B/ns     45.654 B/ns     41.223 B/ns     47.339 B/ns     29.992 B/ns
+    256KB      42.369 B/ns     42.187 B/ns     40.198 B/ns     44.110 B/ns     29.773 B/ns
+    512KB      43.385 B/ns     43.051 B/ns     40.917 B/ns     45.132 B/ns     29.590 B/ns
+      1MB      43.018 B/ns     42.882 B/ns     39.682 B/ns     45.238 B/ns     29.577 B/ns

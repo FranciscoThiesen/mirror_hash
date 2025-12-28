@@ -1,0 +1,59 @@
+=======================================================================
+RIGOROUS BENCHMARK: AES-based hash vs rapidhash
+=======================================================================
+
+Platform: ARM64 with AES crypto extensions
+Runs per size: 20 (reporting median)
+Warmup: 10,000 iterations
+
+Size     Category    rapidhash     AES-hash      Speedup     Status
+----     --------    ---------     --------      -------     ------
+8        SMALL          1.72 ns       6.90 ns      -75.1% RAPID WINS
+16       SMALL          1.72 ns       1.92 ns      -10.6% RAPID WINS
+32       MEDIUM         2.18 ns       2.18 ns       +0.3%      ~EVEN
+64       MEDIUM         2.77 ns       2.17 ns      +27.2%   AES WINS
+128      MEDIUM         4.53 ns       2.72 ns      +66.7%   AES WINS
+256      MEDIUM         7.21 ns       4.39 ns      +64.2%   AES WINS
+512      MEDIUM        13.64 ns       6.64 ns     +105.4%   AES WINS
+1024     MEDIUM        23.67 ns      13.87 ns      +70.6%   AES WINS
+2048     LARGE         42.55 ns      31.97 ns      +33.1%   AES WINS
+4096     LARGE         85.11 ns      69.44 ns      +22.6%   AES WINS
+8192     LARGE        155.18 ns     157.72 ns       -1.6%      ~EVEN
+
+=======================================================================
+STATISTICAL DETAILS (for verification)
+=======================================================================
+
+Size: 64 bytes
+  rapidhash: median=2.79 ns, min=2.76, max=2.85, stddev=0.022
+  AES hash:  median=2.19 ns, min=2.16, max=2.24, stddev=0.021
+  Checksum verification: rapid=0000000000000000, aes=0000000000000000
+
+Size: 256 bytes
+  rapidhash: median=7.20 ns, min=7.06, max=7.29, stddev=0.056
+  AES hash:  median=4.33 ns, min=4.28, max=4.42, stddev=0.039
+  Checksum verification: rapid=0000000000000000, aes=0000000000000000
+
+Size: 1024 bytes
+  rapidhash: median=23.66 ns, min=23.29, max=23.99, stddev=0.235
+  AES hash:  median=13.77 ns, min=13.52, max=14.19, stddev=0.177
+  Checksum verification: rapid=0000000000000000, aes=0000000000000000
+
+Size: 4096 bytes
+  rapidhash: median=84.51 ns, min=83.65, max=86.36, stddev=0.675
+  AES hash:  median=68.96 ns, min=68.03, max=69.39, stddev=0.355
+  Checksum verification: rapid=0000000000000000, aes=0000000000000000
+
+=======================================================================
+HASH OUTPUT VERIFICATION (same input, different algorithms)
+=======================================================================
+
+Input: "Hello, World! This is a test string for hash verification." (58 bytes)
+  rapidhash: 36e9dfd2c4e32a50
+  AES hash:  ff0fce6f47b696a7
+  (Different values expected - these are different algorithms)
+
+Avalanche test (flip 1 bit in input):
+  rapidhash bits changed: 25/64
+  AES hash bits changed:  33/64
+  (Both should be ~32 for good avalanche)

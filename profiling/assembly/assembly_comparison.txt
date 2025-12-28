@@ -1,0 +1,19 @@
+=== GENERATING x86-64 ASSEMBLY COMPARISON ===
+
+==========================================
+STANDARD APPROACH (hash_standard)
+==========================================
+Note: Look for mulq placement relative to memory loads (movq from memory)
+
+hash_standard:                          # @hash_standard
+	.cfi_startproc
+# %bb.0:
+
+==========================================
+SPECULATIVE APPROACH (hash_speculative)
+==========================================
+Note: mulq should appear EARLIER, allowing overlap with loads
+
+hash_speculative:                       # @hash_speculative
+	.cfi_startproc
+# %bb.0:

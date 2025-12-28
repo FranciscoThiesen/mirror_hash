@@ -1,0 +1,32 @@
+Compiling micro benchmark with exp4...
+
+Running micro benchmark...
+=============================================================================
+MICRO OPTIMIZATION EXPERIMENTS
+Goal: Beat rapidhashMicro across size ranges
+=============================================================================
+
+  Size     rapid      base      exp1      exp3      exp4  Best
+  ----      ----      ----      ----      ----      ----  ----
+    1B     3.19n     3.14n     2.43n     3.23n     3.42n  exp1 +23%
+    4B     3.59n     3.28n     2.27n     3.14n     3.28n  exp1 +36%
+    8B     3.52n     3.51n     2.30n     3.13n     3.29n  exp1 +34%
+   16B     3.32n     3.91n     2.30n     3.14n     3.30n  exp1 +30%
+   17B     3.37n     3.34n     2.78n     3.89n     3.73n  exp1 +17%
+   32B     3.34n     3.34n     2.78n     3.90n     3.73n  exp1 +16%
+   48B     3.62n     5.18n     3.06n     4.17n     4.38n  exp1 +15%
+   64B     4.03n     4.02n     3.35n     4.45n     5.12n  exp1 +16%
+   80B     4.70n     4.66n     3.69n     4.92n     5.71n  exp1 +21%
+   96B     5.30n     5.30n     4.28n     5.25n     5.66n  exp1 +19%
+  128B     6.10n     6.09n     4.94n     6.53n     6.81n  exp1 +18%
+  160B     7.46n     7.44n     5.94n     7.97n     8.10n  exp1 +20%
+  256B     8.90n     8.92n     7.91n    10.33n    10.42n  exp1 +11%
+  512B    15.09n    15.05n    15.65n    20.13n    19.59n  base +0%
+ 1024B    28.12n    28.25n    34.51n    39.93n    37.57n  rapid
+
+Legend:
+  rapid = rapidhashMicro (baseline to beat)
+  base  = mh_micro (exact copy)
+  exp1  = 128-bit accumulation (simple finalization, fails SMHasher)
+  exp3  = Hybrid (128-bit bulk, traditional finalization, passes SMHasher)
+  exp4  = 128-bit accumulation with proper finalization (passes SMHasher)

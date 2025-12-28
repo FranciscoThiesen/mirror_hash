@@ -1,0 +1,32 @@
+Compiling micro benchmark...
+
+Running micro benchmark...
+=============================================================================
+MICRO OPTIMIZATION EXPERIMENTS
+Goal: Beat rapidhashMicro across size ranges
+=============================================================================
+
+  Size     rapid      base      exp1      exp2      exp3  Best
+  ----      ----      ----      ----      ----      ----  ----
+    1B     3.20n     3.19n     2.43n     2.81n     2.99n  exp1 +24%
+    4B     3.23n     3.32n     2.29n     2.82n     2.78n  exp1 +29%
+    8B     3.25n     3.28n     2.31n     2.82n     2.90n  exp1 +28%
+   16B     3.26n     3.20n     2.31n     2.84n     2.89n  exp1 +29%
+   17B     3.50n     3.48n     2.59n     3.07n     3.35n  exp1 +26%
+   32B     3.51n     3.53n     2.58n     3.06n     3.34n  exp1 +26%
+   48B     3.93n     4.03n     2.95n     3.43n     3.61n  exp1 +24%
+   64B     4.31n     4.46n     3.34n     4.19n     3.97n  exp1 +22%
+   80B     4.90n     4.93n     3.70n     4.46n     4.62n  exp1 +24%
+   96B     5.28n     5.37n     4.28n     4.65n     5.02n  exp1 +18%
+  128B     6.09n     6.15n     4.95n     5.41n     6.19n  exp1 +18%
+  160B     7.46n     7.44n     5.93n     6.64n     7.75n  exp1 +20%
+  256B     8.91n     8.91n     7.88n     8.33n     9.99n  exp1 +11%
+  512B    15.10n    15.01n    15.91n    16.83n    18.80n  base +0%
+ 1024B    28.33n    28.41n    34.42n    35.06n    37.82n  rapid
+
+Legend:
+  rapid = rapidhashMicro (baseline to beat)
+  base  = mh_micro (exact copy)
+  exp1  = 128-bit accumulation (from nano_v2)
+  exp2  = 128-bit with flattened remainder
+  exp3  = Hybrid (128-bit bulk, traditional remainder)

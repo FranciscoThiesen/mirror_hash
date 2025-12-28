@@ -1,0 +1,15 @@
+Configuring SMHasher...
+Building SMHasher...
+namespace micro {
+          ^
+/workspace/smhasher_upstream/../include/mirror_hash_v2.hpp:246:15: note: previous definition is here
+std::uint64_t micro(const void* key, std::size_t len, std::uint64_t seed = 0) noexcept {
+              ^
+16 errors generated.
+make[3]: *** [CMakeFiles/SMHasherSupport.dir/build.make:202: CMakeFiles/SMHasherSupport.dir/Hashes.cpp.o] Error 1
+make[2]: *** [CMakeFiles/Makefile2:86: CMakeFiles/SMHasherSupport.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:119: CMakeFiles/SMHasher.dir/rule] Error 2
+make: *** [Makefile:192: SMHasher] Error 2
+
+=== Running SMHasher on mirror_hash_unified ===
+bash: line 15: ./SMHasher: No such file or directory

@@ -1,0 +1,34 @@
+Compiling nano benchmark...
+
+Running nano benchmark...
+=============================================================================
+NANO OPTIMIZATION EXPERIMENTS
+Goal: Beat rapidhashNano in at least some size ranges
+=============================================================================
+
+  Size     rapid      base      exp4      exp6  Best
+  ----      ----      ----      ----      ----  ----
+    1B     2.85n     2.91n     2.89n     9.01n     2.99n     2.25n     4.75n  exp4 +20%
+    2B     2.83n     2.85n     2.89n     9.26n     2.99n     2.25n     4.76n  exp4 +20%
+    3B     2.82n     2.85n     2.89n     9.26n     3.04n     2.27n     4.76n  exp4 +19%
+    4B     2.72n     2.72n     3.02n     2.86n     3.30n     2.16n     4.55n  exp4 +20%
+    7B     2.72n     2.72n     2.99n     2.83n     3.26n     2.14n     4.51n  exp4 +21%
+    8B     2.73n     2.72n     2.79n     2.85n     2.86n     2.13n     4.25n  exp4 +21%
+   15B     2.73n     2.77n     2.80n     2.85n     2.85n     2.14n     4.25n  exp4 +21%
+   16B     2.72n     2.71n     2.79n     2.85n     2.85n     2.13n     4.25n  exp4 +21%
+   17B     3.26n     3.26n     3.54n     3.27n     3.81n     2.45n     5.03n  exp4 +24%
+   24B     3.27n     3.26n     3.56n     3.33n     3.80n     2.45n     5.02n  exp4 +25%
+   32B     3.26n     3.27n     3.53n     3.26n     3.82n     2.44n     5.03n  exp4 +25%
+   48B     3.34n     3.34n     3.54n     3.46n     3.81n     2.72n     5.06n  exp4 +18%
+   64B     4.07n     4.07n     4.22n     4.20n     4.37n     3.31n     5.64n  exp4 +18%
+   80B     4.44n     4.44n     4.49n     4.55n     4.64n     3.70n     5.52n  exp4 +16%
+  128B     5.63n     5.63n     5.58n     5.64n     5.75n     4.93n     6.38n  exp4 +12%
+
+Legend:
+  rapid = rapidhashNano (baseline to beat)
+  base  = mh_nano (exact copy)
+  exp1  = Deferred seed mixing
+  exp2  = Simplified 0-3B path
+  exp3  = Single final MUM
+  exp4  = Komihash-style 128-bit accumulation
+  exp5  = Branch-free small path

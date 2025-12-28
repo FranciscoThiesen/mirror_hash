@@ -1,0 +1,172 @@
+=============================================================================
+DOCKER X86-64 BENCHMARK RESULTS - mirror_hash v2/v8/v9 vs rapidhash V3
+Timestamp: Tue Dec 23 05:23:47 2025
+Platform: Docker Ubuntu 22.04, linux/amd64
+Compiler: clang++ -std=c++17 -O3 -march=x86-64
+=============================================================================
+
+EXECUTIVE SUMMARY:
+- mirror_v9 (hybrid v2+v8) UNDERPERFORMS due to code bloat
+- v9 only WINS at: 768B (1 size)
+- v9 TIES at: 192B, 512B (2 sizes)
+- v9 is 6-7% SLOWER than v2 at small sizes (code bloat issue)
+- v8 alone achieves better bulk performance than v9 hybrid
+- rapidhashMicro dominates bulk sizes (1KB+)
+- rapidhashNano dominates tiny sizes (4-16B)
+- mirror_v2 best at: 2-3B, 112-256B
+- ALL variants pass full SMHasher tests (0 FAILs)
+
+KEY FINDINGS:
+1. Hybrid approach fails due to instruction cache pressure
+2. Having both v2's small paths AND v8's bulk paths bloats code
+3. Compiler cannot optimize the combined code as well
+4. rapidhashMicro's unified structure is more cache-efficient
+
+SMHASHER COMPLIANCE (Full Test Suite):
+- mirror_hash_v2:    0 FAIL (GOOD)
+- mirror_hash_v8:    0 FAIL (GOOD)
+- mirror_hash_v9:    0 FAIL (GOOD)
+- rapidhash:         0 FAIL (GOOD)
+- rapidhashMicro:    0 FAIL (GOOD)
+- rapidhashNano:     0 FAIL (GOOD)
+
+=============================================================================
+DETAILED RESULTS
+=============================================================================
+
+Size             mirror_v2       mirror_v8       mirror_v9       rapidhash  rapidhashMicro   rapidhashNano            Best  Winner
+----        --------------  --------------  --------------  --------------  --------------  --------------  --------------  ------
+       1B          3.28 ns         6.42 ns         3.49 ns         3.25 ns         4.64 ns         3.57 ns         3.25 ns  rapidhash
+       2B          3.26 ns         6.38 ns         3.50 ns         3.29 ns         4.67 ns         3.58 ns         3.26 ns  mirror_v2
+       3B          3.26 ns         6.43 ns         3.50 ns         3.27 ns         4.66 ns         3.56 ns         3.26 ns  mirror_v2
+       4B          3.44 ns         6.41 ns         3.57 ns         3.48 ns         4.66 ns         3.29 ns         3.29 ns  rapidhashNano
+       5B          3.44 ns         6.47 ns         3.57 ns         3.48 ns         4.65 ns         3.28 ns         3.28 ns  rapidhashNano
+       6B          3.44 ns         6.43 ns         3.56 ns         3.46 ns         4.66 ns         3.29 ns         3.29 ns  rapidhashNano
+       7B          3.44 ns         6.43 ns         3.54 ns         3.46 ns         4.65 ns         3.30 ns         3.30 ns  rapidhashNano
+       8B          3.41 ns         6.21 ns         3.52 ns         3.38 ns         4.36 ns         3.29 ns         3.29 ns  rapidhashNano
+      10B          3.39 ns         6.12 ns         3.53 ns         3.39 ns         4.36 ns         3.29 ns         3.29 ns  rapidhashNano
+      12B          3.38 ns         6.16 ns         3.55 ns         3.39 ns         4.36 ns         3.29 ns         3.29 ns  rapidhashNano
+      14B          3.38 ns         6.11 ns         3.51 ns         3.37 ns         4.35 ns         3.27 ns         3.27 ns  rapidhashNano
+      16B          3.39 ns         6.10 ns         3.53 ns         3.37 ns         4.37 ns         3.30 ns         3.30 ns  rapidhashNano
+      17B          3.87 ns         7.23 ns         4.03 ns         3.72 ns         5.48 ns         3.92 ns         3.72 ns  rapidhash
+      20B          3.83 ns         7.21 ns         4.01 ns         3.71 ns         5.48 ns         3.92 ns         3.71 ns  rapidhash
+      24B          3.85 ns         7.34 ns         4.04 ns         3.71 ns         5.48 ns         3.93 ns         3.71 ns  rapidhash
+      28B          3.87 ns         7.26 ns         4.03 ns         3.74 ns         5.50 ns         3.94 ns         3.74 ns  rapidhash
+      32B          4.03 ns         7.35 ns         4.06 ns         3.78 ns         5.60 ns         3.98 ns         3.78 ns  rapidhash
+      33B          4.34 ns         7.52 ns         4.57 ns         3.97 ns         5.70 ns         4.23 ns         3.97 ns  rapidhash
+      40B          4.34 ns         7.53 ns         4.59 ns         4.02 ns         5.72 ns         4.26 ns         4.02 ns  rapidhash
+      48B          4.38 ns         7.68 ns         4.62 ns         3.98 ns         5.70 ns         4.25 ns         3.98 ns  rapidhash
+      49B          4.78 ns         7.78 ns         5.05 ns         4.62 ns         5.98 ns         5.05 ns         4.62 ns  rapidhash
+      56B          4.78 ns         7.76 ns         5.04 ns         4.67 ns         5.98 ns         5.05 ns         4.67 ns  rapidhash
+      64B          4.77 ns         7.81 ns         5.01 ns         4.62 ns         5.99 ns         5.05 ns         4.62 ns  rapidhash
+      72B          5.04 ns         7.76 ns         5.43 ns         4.88 ns         5.70 ns         5.33 ns         4.88 ns  rapidhash
+      80B          5.02 ns         7.71 ns         5.43 ns         4.93 ns         5.70 ns         5.36 ns         4.93 ns  rapidhash
+      81B          5.45 ns         8.13 ns         5.89 ns         5.36 ns         6.31 ns         5.70 ns         5.36 ns  rapidhash
+      96B          5.39 ns         8.02 ns         5.89 ns         5.32 ns         6.29 ns         5.66 ns         5.32 ns  rapidhash
+     112B          5.61 ns         8.54 ns         6.18 ns         6.14 ns         6.62 ns         6.10 ns         5.61 ns  mirror_v2
+     128B          6.04 ns         8.72 ns         6.64 ns         6.59 ns         6.94 ns         6.45 ns         6.04 ns  mirror_v2
+     160B          6.76 ns         9.40 ns         8.19 ns         7.23 ns         8.13 ns         7.14 ns         6.76 ns  mirror_v2
+     192B          7.89 ns         9.95 ns         7.90 ns         8.27 ns         8.24 ns         8.15 ns         7.89 ns  TIE (~0.1%)
+     224B          8.54 ns        10.73 ns         9.25 ns        10.03 ns         9.41 ns         8.70 ns         8.54 ns  mirror_v2
+     256B          9.21 ns        11.33 ns         9.27 ns         9.55 ns         9.53 ns         9.56 ns         9.21 ns  mirror_v2
+     384B         12.79 ns        14.43 ns        12.97 ns        12.74 ns        13.15 ns        13.41 ns        12.74 ns  rapidhash
+     512B         15.17 ns        16.93 ns        15.03 ns        16.17 ns        15.01 ns        17.47 ns        15.01 ns  TIE (~0.1%)
+     768B         21.10 ns        22.67 ns        20.84 ns        23.68 ns        20.97 ns        25.68 ns        20.84 ns  mirror_v9 ****
+      1KB         27.45 ns        28.63 ns        27.66 ns        28.07 ns        27.14 ns        33.43 ns        27.14 ns  rapidhashMicro
+      2KB         50.16 ns        50.45 ns        48.50 ns        52.44 ns        47.96 ns        67.59 ns        47.96 ns  rapidhashMicro
+      4KB         96.12 ns        93.91 ns        91.47 ns       101.01 ns        90.59 ns       136.83 ns        90.59 ns  rapidhashMicro
+      8KB        188.33 ns       181.24 ns       179.87 ns       199.14 ns       176.84 ns       277.07 ns       176.84 ns  rapidhashMicro
+     16KB        377.56 ns       364.28 ns       377.52 ns       400.71 ns       354.22 ns       559.83 ns       354.22 ns  rapidhashMicro
+     32KB        747.33 ns       717.57 ns       721.44 ns       794.81 ns       699.35 ns      1127.86 ns       699.35 ns  rapidhashMicro
+     64KB       1500.93 ns      1438.22 ns      1464.17 ns      1591.58 ns      1401.20 ns      2262.09 ns      1401.20 ns  rapidhashMicro
+    128KB       3004.65 ns      2957.06 ns      3019.73 ns      3197.17 ns      2845.57 ns      4570.26 ns      2845.57 ns  rapidhashMicro
+    256KB       6412.04 ns      6294.12 ns      6423.12 ns      6573.48 ns      6059.09 ns      9208.69 ns      6059.09 ns  rapidhashMicro
+    512KB      12461.82 ns     12355.92 ns     12199.89 ns     12896.24 ns     11839.35 ns     18549.83 ns     11839.35 ns  rapidhashMicro
+      1MB      25275.47 ns     25056.93 ns     25155.93 ns     26815.20 ns     24312.10 ns     36990.40 ns     24312.10 ns  rapidhashMicro
+
+=============================================================================
+mirror_v9 (HYBRID) PERFORMANCE ANALYSIS
+=============================================================================
+
+Why Hybrid Underperforms:
+1. Code bloat: Combining v2's small paths + v8's bulk paths = larger binary
+2. Instruction cache pressure: More code to fit in L1i cache
+3. Branch predictor pressure: More branch targets to track
+4. Compiler can't optimize as aggressively with more code paths
+
+v9 vs v2 at Small Sizes (1-16B):
+Size       v2 (ns)      v9 (ns)   Slowdown
+----       -------      -------   --------
+   1B        3.28         3.49       6.4%
+   8B        3.41         3.52       3.2%
+  16B        3.39         3.53       4.1%
+
+Conclusion: The hybrid approach is NOT viable. Use:
+- mirror_v2 for general-purpose hashing
+- rapidhashMicro for bulk-focused workloads
+
+=============================================================================
+RECOMMENDATION MATRIX
+=============================================================================
+
+For workloads dominated by:
+- Tiny keys (1-16B):    Use rapidhashNano
+- Small keys (17-80B):  Use rapidhash
+- Medium keys (81-256B): Use mirror_v2
+- Large keys (256B+):   Use rapidhashMicro
+
+If you need ONE hash for all sizes:
+- General-purpose:      mirror_v2 (competitive everywhere)
+- Bulk-focused:         rapidhashMicro (5-10% faster for large data)
+
+=============================================================================
+CSV OUTPUT (for import)
+=============================================================================
+size_bytes,mirror_v2_ns,mirror_v8_ns,mirror_v9_ns,rapidhash_ns,rapidhashMicro_ns,rapidhashNano_ns
+1,3.282,6.420,3.491,3.250,4.638,3.572
+2,3.259,6.379,3.495,3.293,4.672,3.575
+3,3.257,6.435,3.496,3.269,4.659,3.556
+4,3.435,6.408,3.574,3.479,4.656,3.291
+5,3.438,6.470,3.572,3.484,4.654,3.285
+6,3.438,6.427,3.557,3.456,4.656,3.291
+7,3.437,6.425,3.542,3.461,4.651,3.296
+8,3.406,6.209,3.524,3.378,4.361,3.290
+10,3.392,6.122,3.527,3.385,4.364,3.291
+12,3.379,6.156,3.548,3.390,4.361,3.286
+14,3.378,6.107,3.515,3.366,4.354,3.275
+16,3.388,6.102,3.528,3.370,4.369,3.298
+17,3.870,7.234,4.033,3.715,5.482,3.925
+20,3.832,7.209,4.006,3.708,5.478,3.916
+24,3.850,7.340,4.044,3.712,5.480,3.925
+28,3.873,7.258,4.029,3.737,5.503,3.936
+32,4.026,7.354,4.062,3.780,5.601,3.976
+33,4.340,7.522,4.573,3.967,5.702,4.225
+40,4.340,7.526,4.587,4.015,5.715,4.255
+48,4.378,7.681,4.616,3.978,5.699,4.250
+49,4.780,7.781,5.047,4.618,5.979,5.046
+56,4.781,7.758,5.040,4.668,5.983,5.047
+64,4.767,7.809,5.008,4.616,5.987,5.048
+72,5.036,7.764,5.429,4.876,5.702,5.333
+80,5.019,7.715,5.427,4.931,5.696,5.361
+81,5.446,8.127,5.888,5.355,6.308,5.702
+96,5.391,8.020,5.893,5.321,6.293,5.662
+112,5.613,8.543,6.181,6.138,6.621,6.099
+128,6.036,8.721,6.637,6.591,6.937,6.452
+160,6.763,9.399,8.186,7.235,8.133,7.144
+192,7.891,9.951,7.898,8.269,8.239,8.147
+224,8.538,10.726,9.250,10.026,9.408,8.695
+256,9.207,11.329,9.269,9.552,9.532,9.562
+384,12.787,14.430,12.969,12.744,13.149,13.409
+512,15.166,16.932,15.030,16.166,15.012,17.473
+768,21.100,22.666,20.839,23.677,20.970,25.684
+1024,27.453,28.626,27.665,28.068,27.139,33.434
+2048,50.163,50.448,48.498,52.442,47.960,67.595
+4096,96.117,93.914,91.466,101.012,90.585,136.832
+8192,188.328,181.240,179.874,199.145,176.845,277.069
+16384,377.564,364.277,377.518,400.710,354.219,559.834
+32768,747.328,717.570,721.441,794.812,699.354,1127.864
+65536,1500.928,1438.224,1464.174,1591.577,1401.195,2262.094
+131072,3004.648,2957.064,3019.731,3197.167,2845.565,4570.262
+262144,6412.041,6294.120,6423.125,6573.479,6059.091,9208.693
+524288,12461.817,12355.920,12199.887,12896.242,11839.353,18549.832
+1048576,25275.468,25056.927,25155.927,26815.200,24312.096,36990.403

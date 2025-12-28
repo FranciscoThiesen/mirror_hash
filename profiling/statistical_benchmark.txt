@@ -1,0 +1,48 @@
+Compiling statistical benchmark...
+
+Running benchmark (this may take a while due to 50M hashes per size)...
+=============================================================
+HIGH-ITERATION STATISTICAL BENCHMARK
+Runs: 50, Iterations per run: 1000000 (Total: 50M hashes)
+=============================================================
+
+Size   8 bytes:
+  Standard:    median=1.99 ns, mean=2.05 ns, stddev=0.12 ns
+  Speculative: median=2.00 ns, mean=2.04 ns, stddev=0.12 ns
+  Improvement: -0.4%
+
+Size  16 bytes:
+  Standard:    median=2.00 ns, mean=2.03 ns, stddev=0.11 ns
+  Speculative: median=2.00 ns, mean=2.03 ns, stddev=0.11 ns
+  Improvement: +0.2%
+
+Size  24 bytes:
+  Standard:    median=2.02 ns, mean=2.07 ns, stddev=0.14 ns
+  Speculative: median=2.03 ns, mean=2.06 ns, stddev=0.14 ns
+  Improvement: -0.5%
+
+Size  32 bytes:
+  Standard:    median=2.06 ns, mean=2.08 ns, stddev=0.12 ns
+  Speculative: median=2.04 ns, mean=2.09 ns, stddev=0.13 ns
+  Improvement: +1.0%
+
+Size  48 bytes:
+  Standard:    median=2.02 ns, mean=2.08 ns, stddev=0.15 ns
+  Speculative: median=2.01 ns, mean=2.09 ns, stddev=0.15 ns
+  Improvement: +0.7%
+
+Size  64 bytes:
+  Standard:    median=1.99 ns, mean=2.03 ns, stddev=0.11 ns
+  Speculative: median=1.99 ns, mean=2.02 ns, stddev=0.11 ns
+  Improvement: -0.1%
+
+Size  96 bytes:
+  Standard:    median=2.01 ns, mean=2.06 ns, stddev=0.13 ns
+  Speculative: median=2.02 ns, mean=2.05 ns, stddev=0.11 ns
+  Improvement: -0.3%
+
+Size 128 bytes:
+  Standard:    median=2.05 ns, mean=2.09 ns, stddev=0.11 ns
+  Speculative: median=2.01 ns, mean=2.06 ns, stddev=0.13 ns
+  Improvement: +2.0%
+

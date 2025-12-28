@@ -1,0 +1,126 @@
+Compiling nano/micro benchmark...
+
+Running benchmark...
+=============================================================================
+NANO/MICRO HEAD-TO-HEAD BENCHMARK
+Testing: Can we match rapidhash with exact structural copies?
+=============================================================================
+
+=== NANO COMPARISON (3-lane, <100 instructions) ===
+
+      Size       mh_nano     rapidNano       Diff%  Winner
+      ----     ---------     ---------       -----  ------
+        1B        1.77ns        1.51ns           -17.0%  rapidNano +17%
+        2B        1.56ns        1.52ns           -2.5%  rapidNano +2%
+        3B        1.56ns        1.53ns           -1.6%  rapidNano +1%
+        4B        1.44ns        1.45ns          +0.2%  TIE
+        5B        1.44ns        1.46ns          +0.9%  TIE
+        6B        1.49ns        1.45ns           -2.9%  rapidNano +2%
+        7B        1.43ns        1.46ns          +2.1%  mh_nano +2%
+        8B        1.49ns        1.49ns           -0.3%  TIE
+       10B        1.50ns        1.51ns          +0.6%  TIE
+       12B        1.51ns        1.50ns           -0.5%  TIE
+       14B        1.48ns        1.47ns           -0.3%  TIE
+       16B        1.49ns        1.47ns           -0.8%  TIE
+       17B        2.71ns        1.96ns           -38.2%  rapidNano +38%
+       20B        2.73ns        1.96ns           -39.5%  rapidNano +39%
+       24B        2.70ns        1.95ns           -38.1%  rapidNano +38%
+       28B        2.69ns        1.95ns           -37.9%  rapidNano +37%
+       32B        2.70ns        1.96ns           -38.0%  rapidNano +38%
+       33B        3.09ns        2.43ns           -27.3%  rapidNano +27%
+       40B        2.98ns        2.42ns           -23.4%  rapidNano +23%
+       48B        3.04ns        2.36ns           -29.2%  rapidNano +29%
+       49B        4.19ns        3.16ns           -32.8%  rapidNano +32%
+       56B        4.22ns        3.04ns           -38.8%  rapidNano +38%
+       64B        4.15ns        3.08ns           -35.0%  rapidNano +34%
+       72B        4.62ns        3.50ns           -32.0%  rapidNano +31%
+       80B        4.67ns        3.52ns           -32.7%  rapidNano +32%
+       81B        4.93ns        3.96ns           -24.5%  rapidNano +24%
+       96B        4.93ns        3.94ns           -25.3%  rapidNano +25%
+      112B        5.28ns        4.26ns           -23.8%  rapidNano +23%
+      128B        5.70ns        4.85ns           -17.5%  rapidNano +17%
+      160B        6.38ns        5.49ns           -16.3%  rapidNano +16%
+      192B        7.49ns        6.76ns           -10.8%  rapidNano +10%
+      224B        8.58ns        7.71ns           -11.2%  rapidNano +11%
+      256B        9.48ns        8.58ns           -10.5%  rapidNano +10%
+      384B       13.69ns       12.85ns           -6.6%  rapidNano +6%
+      512B       17.55ns       16.86ns           -4.1%  rapidNano +4%
+      768B       26.72ns       25.97ns           -2.9%  rapidNano +2%
+       1KB       35.01ns       33.55ns           -4.3%  rapidNano +4%
+       2KB       69.44ns       69.70ns          +0.4%  TIE
+       4KB      146.65ns      142.95ns           -2.6%  rapidNano +2%
+       8KB      291.92ns      303.49ns          +3.8%  mh_nano +3%
+      16KB      594.27ns      597.11ns          +0.5%  TIE
+      32KB     1209.86ns     1165.49ns           -3.8%  rapidNano +3%
+      64KB     2358.04ns     2321.92ns           -1.6%  rapidNano +1%
+     128KB     4643.55ns     4701.24ns          +1.2%  mh_nano +1%
+     256KB     9940.47ns     9765.17ns           -1.8%  rapidNano +1%
+     512KB    18890.03ns    18895.77ns          +0.0%  TIE
+       1MB    37659.27ns    37667.34ns          +0.0%  TIE
+
+Nano Summary: mh_nano wins 3, rapidNano wins 33, ties 11
+
+=== MICRO COMPARISON (5-lane, ~140 instructions) ===
+
+      Size      mh_micro    rapidMicro       Diff%  Winner
+      ----     ---------    ----------       -----  ------
+        1B        3.38ns        3.14ns           -7.6%  rapidMicro +7%
+        2B        3.28ns        3.30ns          +0.8%  TIE
+        3B        3.24ns        3.10ns           -4.3%  rapidMicro +4%
+        4B        3.18ns        3.30ns          +3.7%  mh_micro +3%
+        5B        3.39ns        3.35ns           -1.2%  rapidMicro +1%
+        6B        3.33ns        3.08ns           -8.1%  rapidMicro +8%
+        7B        3.27ns        3.31ns          +1.3%  mh_micro +1%
+        8B        3.25ns        3.19ns           -1.9%  rapidMicro +1%
+       10B        3.25ns        3.40ns          +4.4%  mh_micro +4%
+       12B        3.29ns        3.33ns          +1.1%  mh_micro +1%
+       14B        3.24ns        3.27ns          +0.9%  TIE
+       16B        3.20ns        3.30ns          +3.0%  mh_micro +3%
+       17B        3.48ns        3.40ns           -2.4%  rapidMicro +2%
+       20B        3.47ns        3.49ns          +0.6%  TIE
+       24B        3.45ns        3.55ns          +2.8%  mh_micro +2%
+       28B        3.40ns        3.49ns          +2.3%  mh_micro +2%
+       32B        3.53ns        3.52ns           -0.2%  TIE
+       33B        3.71ns        3.90ns          +4.8%  mh_micro +4%
+       40B        3.67ns        3.67ns           -0.1%  TIE
+       48B        3.66ns        3.65ns           -0.3%  TIE
+       49B        4.18ns        4.21ns          +0.6%  TIE
+       56B        4.19ns        4.20ns          +0.2%  TIE
+       64B        4.24ns        4.20ns           -1.0%  TIE
+       72B        4.67ns        4.72ns          +1.1%  mh_micro +1%
+       80B        4.69ns        4.69ns          +0.0%  TIE
+       81B        4.98ns        5.02ns          +0.9%  TIE
+       96B        4.95ns        5.01ns          +1.1%  mh_micro +1%
+      112B        5.26ns        5.32ns          +1.1%  mh_micro +1%
+      128B        5.79ns        5.72ns           -1.2%  rapidMicro +1%
+      160B        7.10ns        7.11ns          +0.1%  TIE
+      192B        7.03ns        7.04ns          +0.2%  TIE
+      224B        8.53ns        8.36ns           -2.0%  rapidMicro +1%
+      256B        8.59ns        8.39ns           -2.4%  rapidMicro +2%
+      384B       12.22ns       12.67ns          +3.5%  mh_micro +3%
+      512B       16.05ns       14.49ns           -10.8%  rapidMicro +10%
+      768B       20.52ns       20.48ns           -0.2%  TIE
+       1KB       26.83ns       26.93ns          +0.4%  TIE
+       2KB       49.43ns       49.43ns           -0.0%  TIE
+       4KB       93.10ns       93.02ns           -0.1%  TIE
+       8KB      190.01ns      205.22ns          +7.4%  mh_micro +7%
+      16KB      374.03ns      365.49ns           -2.3%  rapidMicro +2%
+      32KB      721.04ns      720.35ns           -0.1%  TIE
+      64KB     1469.53ns     1457.15ns           -0.8%  TIE
+     128KB     2945.01ns     2933.69ns           -0.4%  TIE
+     256KB     6281.37ns     6270.56ns           -0.2%  TIE
+     512KB    12489.78ns    12372.63ns           -0.9%  TIE
+       1MB    24670.03ns    24846.10ns          +0.7%  TIE
+
+Micro Summary: mh_micro wins 13, rapidMicro wins 11, ties 23
+
+=============================================================================
+ANALYSIS
+=============================================================================
+If mh_nano/mh_micro are slower than rapidhash variants despite identical
+structure, the difference must be in:
+  1. C++ vs C compilation differences
+  2. Constexpr/inline attribute handling
+  3. Namespace overhead (though unlikely)
+  4. Static vs non-static secrets array
+

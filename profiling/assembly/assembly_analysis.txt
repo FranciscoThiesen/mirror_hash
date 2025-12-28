@@ -1,0 +1,17 @@
+==================================================================
+ASSEMBLY ANALYSIS: STANDARD vs SPECULATIVE APPROACH
+==================================================================
+
+Key insight: In the speculative version, the mulq instruction
+can START executing while memory loads are still in flight.
+This is because modern CPUs execute independent instructions in parallel.
+
+==================================================================
+STANDARD APPROACH (hash_standard)
+==================================================================
+
+
+==================================================================
+SPECULATIVE APPROACH (hash_speculative)
+==================================================================
+

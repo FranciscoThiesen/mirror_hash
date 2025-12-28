@@ -1,0 +1,129 @@
+================================================================
+ASSEMBLY ANALYSIS OF ACTUAL IMPLEMENTATIONS
+================================================================
+
+Generating assembly with -O3 -march=x86-64...
+
+--- mh_nano_spec assembly (first 60 lines) ---
+mh_nano_spec_asm:                       # @mh_nano_spec_asm
+mh_nano_spec_asm:                       # @mh_nano_spec_asm
+	.cfi_startproc
+# %bb.0:
+	pushq	%r15
+	.cfi_def_cfa_offset 16
+	pushq	%r14
+	.cfi_def_cfa_offset 24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset %rbx, -40
+	.cfi_offset %r12, -32
+	.cfi_offset %r14, -24
+	.cfi_offset %r15, -16
+	movq	%rdx, %rcx
+	movabsq	$-8378864009470890807, %r11     # imm = 0x8BB84B93962EACC9
+	movabsq	$5418857496715711651, %rbx      # imm = 0x4B33A62ED433D4A3
+	movq	%rdx, %rax
+	xorq	%rbx, %rax
+	cmpq	$16, %rsi
+	ja	.LBB0_9
+# %bb.1:
+	cmpq	$4, %rsi
+	jb	.LBB0_5
+# %bb.2:
+	cmpq	$8, %rsi
+	jb	.LBB0_4
+# %bb.3:
+	movq	(%rdi), %rbx
+	movq	-8(%rdi,%rsi), %rdi
+	jmp	.LBB0_8
+.LBB0_5:
+	testq	%rsi, %rsi
+	je	.LBB0_6
+# %bb.7:
+	movzbl	(%rdi), %edx
+	shlq	$45, %rdx
+	movzbl	-1(%rsi,%rdi), %ebx
+	orq	%rdx, %rbx
+	movq	%rsi, %rdx
+	shrq	%rdx
+	movzbl	(%rdi,%rdx), %edi
+	jmp	.LBB0_8
+.LBB0_4:
+	movl	(%rdi), %ebx
+	movl	-4(%rdi,%rsi), %edi
+	jmp	.LBB0_8
+.LBB0_6:
+	xorl	%ebx, %ebx
+	xorl	%edi, %edi
+.LBB0_8:
+	mulq	%r11
+	xorq	%rax, %rdx
+	xorq	%rsi, %rcx
+	xorq	%rdx, %rcx
+.LBB0_17:
+	xorq	%rcx, %rdi
+	xorq	%r11, %rbx
+
+--- mh_micro assembly (first 60 lines) ---
+mh_micro_asm:                           # @mh_micro_asm
+mh_micro_asm:                           # @mh_micro_asm
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	pushq	%r15
+	.cfi_def_cfa_offset 24
+	pushq	%r14
+	.cfi_def_cfa_offset 32
+	pushq	%r13
+	.cfi_def_cfa_offset 40
+	pushq	%r12
+	.cfi_def_cfa_offset 48
+	pushq	%rbx
+	.cfi_def_cfa_offset 56
+	.cfi_offset %rbx, -56
+	.cfi_offset %r12, -48
+	.cfi_offset %r13, -40
+	.cfi_offset %r14, -32
+	.cfi_offset %r15, -24
+	.cfi_offset %rbp, -16
+	movq	%rdx, %rcx
+	movabsq	$-8378864009470890807, %r15     # imm = 0x8BB84B93962EACC9
+	movabsq	$5418857496715711651, %rbx      # imm = 0x4B33A62ED433D4A3
+	movq	%rdx, %rax
+	xorq	%rbx, %rax
+	cmpq	$16, %rsi
+	ja	.LBB1_9
+# %bb.1:
+	cmpq	$4, %rsi
+	jb	.LBB1_5
+# %bb.2:
+	cmpq	$8, %rsi
+	jb	.LBB1_4
+# %bb.3:
+	movq	(%rdi), %rbp
+	movq	-8(%rdi,%rsi), %rdi
+	jmp	.LBB1_8
+.LBB1_5:
+	testq	%rsi, %rsi
+	je	.LBB1_6
+# %bb.7:
+	movzbl	(%rdi), %edx
+	shlq	$45, %rdx
+	movzbl	-1(%rsi,%rdi), %ebp
+	orq	%rdx, %rbp
+	movq	%rsi, %rdx
+	shrq	%rdx
+	movzbl	(%rdi,%rdx), %edi
+	jmp	.LBB1_8
+.LBB1_4:
+	movl	(%rdi), %ebp
+	movl	-4(%rdi,%rsi), %edi
+	jmp	.LBB1_8
+.LBB1_6:
+	xorl	%ebp, %ebp
+	xorl	%edi, %edi
+.LBB1_8:
+	mulq	%r15

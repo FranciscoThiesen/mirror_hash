@@ -1,0 +1,8 @@
+Compiling actual implementation benchmark...
+/tmp/actual_impl_bench.cpp:49:50: error: no member named 'mh_nano_spec' in namespace 'mirror_hash'
+            mh_times[r] = benchmark(mirror_hash::mh_nano_spec, data, len, ITERS);
+                                    ~~~~~~~~~~~~~^
+1 error generated.
+
+Running benchmark...
+bash: line 79: /tmp/actual_impl_bench: No such file or directory

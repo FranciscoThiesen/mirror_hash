@@ -1,0 +1,8 @@
+Compiling mh_micro benchmark...
+/tmp/actual_micro_bench.cpp:48:50: error: no member named 'mh_micro' in namespace 'mirror_hash'
+            mh_times[r] = benchmark(mirror_hash::mh_micro, data, len, ITERS);
+                                    ~~~~~~~~~~~~~^
+1 error generated.
+
+Running benchmark...
+bash: line 78: /tmp/actual_micro_bench: No such file or directory

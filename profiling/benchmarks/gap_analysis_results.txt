@@ -1,0 +1,39 @@
+=== Extended Gap Analysis: 48-160 byte range ===
+Finding where mirror_hash CONSISTENTLY wins
+
+Size    rapidhash    mirror_hash    Speedup    Winner
+----    ---------    -----------    -------    ------
+48        2.45 ns      3.23 ns       -24.0%    rapidhash (16-aligned)
+56        2.51 ns      4.88 ns       -48.5%    rapidhash
+64        2.46 ns      2.41 ns        +2.0%    mirror_hash (16-aligned)
+72        2.93 ns      4.03 ns       -27.3%    rapidhash
+80        2.94 ns      2.69 ns        +9.5%    mirror_hash (16-aligned)
+88        3.58 ns      4.35 ns       -17.7%    rapidhash
+96        3.65 ns      2.92 ns       +25.0%    mirror_hash (16-aligned)
+104       4.41 ns      4.42 ns        -0.1%    rapidhash
+112       4.31 ns      3.24 ns       +33.0%    mirror_hash (16-aligned)
+120       4.12 ns      4.91 ns       -16.1%    rapidhash
+128       4.13 ns      3.08 ns       +34.0%    mirror_hash (16-aligned)
+136       4.63 ns      4.59 ns        +0.8%    mirror_hash
+144       4.60 ns      3.22 ns       +42.6%    mirror_hash (16-aligned)
+152       4.93 ns      4.59 ns        +7.4%    mirror_hash
+160       4.89 ns      3.49 ns       +40.4%    mirror_hash (16-aligned)
+
+=== Detailed Analysis of Transition ===
+
+Fine-grained scan (60-140 bytes):
+Size    Speedup    Winner
+60       -60.5%    rapid
+64        +2.0%    mirror
+  mirror_hash wins: 64-64 bytes (1 sizes)
+80        +9.9%    mirror
+  mirror_hash wins: 80-80 bytes (1 sizes)
+96       +26.0%    mirror
+  mirror_hash wins: 96-98 bytes (3 sizes)
+  mirror_hash wins: 105-105 bytes (1 sizes)
+112      +31.7%    mirror
+  mirror_hash wins: 112-112 bytes (1 sizes)
+128      +33.1%    mirror
+  mirror_hash wins: 128-130 bytes (3 sizes)
+  mirror_hash wins: 137-137 bytes (1 sizes)
+140      -24.8%    rapid

@@ -1,0 +1,91 @@
+========================================================
+LLVM-MCA STATIC SCHEDULING ANALYSIS
+========================================================
+
+Generating assembly...
+
+--- hash_standard LLVM-MCA analysis ---
+
+warning: found a return instruction in the input assembly sequence.
+note: program counter updates are ignored.
+Iterations:        100
+Instructions:      1300
+Total Cycles:      424
+Total uOps:        2100
+
+Dispatch Width:    6
+uOps Per Cycle:    4.95
+IPC:               3.07
+Block RThroughput: 3.5
+
+
+Instruction Info:
+[1]: #uOps
+[2]: Latency
+[3]: RThroughput
+[4]: MayLoad
+[5]: MayStore
+[6]: HasSideEffects (U)
+
+[1]    [2]    [3]    [4]    [5]    [6]    Instructions:
+ 1      1     0.25                        movq	%rdx, %rax
+ 1      1     0.25                        movabsq	$3257665815644502181, %rdx
+ 1      1     0.25                        xorq	%rax, %rdx
+ 1      1     0.25                        movabsq	$-8378864009470890807, %rcx
+ 3      4     1.00                        mulxq	%rcx, %rcx, %r8
+ 1      1     0.25                        movq	%rsi, %rdx
+ 1      1     0.25                        xorq	%rax, %rcx
+ 1      1     0.25                        xorq	%r8, %rcx
+ 2      6     0.50    *                   xorq	(%rdi), %rcx
+ 2      6     0.50    *                   xorq	-8(%rdi,%rsi), %rdx
+ 3      4     1.00                        mulxq	%rcx, %rcx, %rax
+ 1      1     0.25                        xorq	%rcx, %rax
+ 3      7     1.00                  U     retq
+
+
+Resources:
+[0]   - SKLDivider
+[1]   - SKLFPDivider
+
+--- hash_speculative LLVM-MCA analysis ---
+
+/tmp/spec_only.s:21:1: error: Unfinished frame!
+
+^
+warning: found a return instruction in the input assembly sequence.
+note: program counter updates are ignored.
+Iterations:        100
+Instructions:      1300
+Total Cycles:      424
+Total uOps:        2100
+
+Dispatch Width:    6
+uOps Per Cycle:    4.95
+IPC:               3.07
+Block RThroughput: 3.5
+
+
+Instruction Info:
+[1]: #uOps
+[2]: Latency
+[3]: RThroughput
+[4]: MayLoad
+[5]: MayStore
+[6]: HasSideEffects (U)
+
+[1]    [2]    [3]    [4]    [5]    [6]    Instructions:
+ 1      1     0.25                        movq	%rdx, %rax
+ 1      1     0.25                        movabsq	$3257665815644502181, %rdx
+ 1      1     0.25                        xorq	%rax, %rdx
+ 1      1     0.25                        movabsq	$-8378864009470890807, %rcx
+ 3      4     1.00                        mulxq	%rcx, %rcx, %r8
+ 1      1     0.25                        movq	%rsi, %rdx
+ 1      1     0.25                        xorq	%rax, %rcx
+ 1      1     0.25                        xorq	%r8, %rcx
+ 2      6     0.50    *                   xorq	(%rdi), %rcx
+ 2      6     0.50    *                   xorq	-8(%rdi,%rsi), %rdx
+ 3      4     1.00                        mulxq	%rcx, %rcx, %rax
+ 1      1     0.25                        xorq	%rcx, %rax
+ 3      7     1.00                  U     retq
+
+

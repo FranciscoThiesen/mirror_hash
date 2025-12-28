@@ -1,0 +1,123 @@
+=== Comprehensive Performance Results ===
+Platform: M3 Max Pro MacBook
+Date: Sat Dec 27 19:18:33 PST 2025
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 8 bytes:
+  mirror_hash: 1.21 ns/hash (6.60 GB/s)
+  rapidhash:   1.16 ns/hash (6.88 GB/s)
+  speedup:     -4.2%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 16 bytes:
+  mirror_hash: 1.11 ns/hash (14.39 GB/s)
+  rapidhash:   1.09 ns/hash (14.68 GB/s)
+  speedup:     -2.0%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 24 bytes:
+  mirror_hash: 3.54 ns/hash (6.79 GB/s)
+  rapidhash:   1.25 ns/hash (19.23 GB/s)
+  speedup:     -64.7%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 32 bytes:
+  mirror_hash: 1.91 ns/hash (16.76 GB/s)
+  rapidhash:   1.29 ns/hash (24.79 GB/s)
+  speedup:     -32.4%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 48 bytes:
+  mirror_hash: 2.63 ns/hash (18.27 GB/s)
+  rapidhash:   1.63 ns/hash (29.46 GB/s)
+  speedup:     -38.0%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 64 bytes:
+  mirror_hash: 2.02 ns/hash (31.69 GB/s)
+  rapidhash:   2.25 ns/hash (28.41 GB/s)
+  speedup:     11.5%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 96 bytes:
+  mirror_hash: 2.42 ns/hash (39.65 GB/s)
+  rapidhash:   2.82 ns/hash (34.09 GB/s)
+  speedup:     16.3%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 128 bytes:
+  mirror_hash: 2.57 ns/hash (49.84 GB/s)
+  rapidhash:   3.80 ns/hash (33.66 GB/s)
+  speedup:     48.1%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 192 bytes:
+  mirror_hash: 3.16 ns/hash (60.75 GB/s)
+  rapidhash:   5.00 ns/hash (38.37 GB/s)
+  speedup:     58.3%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 256 bytes:
+  mirror_hash: 3.53 ns/hash (72.60 GB/s)
+  rapidhash:   6.32 ns/hash (40.52 GB/s)
+  speedup:     79.2%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 384 bytes:
+  mirror_hash: 4.48 ns/hash (85.76 GB/s)
+  rapidhash:   9.13 ns/hash (42.06 GB/s)
+  speedup:     103.9%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 512 bytes:
+  mirror_hash: 5.43 ns/hash (94.24 GB/s)
+  rapidhash:   11.24 ns/hash (45.54 GB/s)
+  speedup:     106.9%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 768 bytes:
+  mirror_hash: 7.32 ns/hash (104.86 GB/s)
+  rapidhash:   19.96 ns/hash (38.47 GB/s)
+  speedup:     172.6%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 1024 bytes:
+  mirror_hash: 9.24 ns/hash (110.84 GB/s)
+  rapidhash:   20.91 ns/hash (48.97 GB/s)
+  speedup:     126.3%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 2048 bytes:
+  mirror_hash: 20.83 ns/hash (98.32 GB/s)
+  rapidhash:   42.48 ns/hash (48.21 GB/s)
+  speedup:     103.9%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 4096 bytes:
+  mirror_hash: 31.34 ns/hash (130.71 GB/s)
+  rapidhash:   81.60 ns/hash (50.19 GB/s)
+  speedup:     160.4%
+
+Running mirror_hash benchmark...
+Running rapidhash benchmark...
+Results for 8192 bytes:
+  mirror_hash: 61.90 ns/hash (132.34 GB/s)
+  rapidhash:   151.24 ns/hash (54.17 GB/s)
+  speedup:     144.3%
+

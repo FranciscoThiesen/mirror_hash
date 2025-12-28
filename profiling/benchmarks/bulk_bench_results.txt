@@ -1,0 +1,29 @@
+Compiling bulk benchmark...
+
+Running bulk benchmark...
+=============================================================================
+BULK OPTIMIZATION EXPERIMENTS
+Goal: Beat rapidhash across size ranges
+=============================================================================
+
+   Size     rapid      base      exp1      exp2      exp3  Best
+   ----      ----      ----      ----      ----      ----  ----
+    64B     4.37n     4.26n     3.83n     5.55n     4.84n  exp1 +12%
+    96B     5.35n     5.25n     4.57n     6.87n     5.64n  exp1 +14%
+   128B     6.25n     6.25n     5.25n     6.53n     7.04n  exp1 +16%
+   192B     8.38n     8.54n     6.82n     9.39n     9.38n  exp1 +18%
+   256B     9.43n     9.43n     8.08n     9.88n    11.70n  exp1 +14%
+   384B    12.84n    12.85n    11.01n    13.19n    16.17n  exp1 +14%
+   512B    16.46n    16.40n    14.18n    17.50n    22.87n  exp1 +13%
+   768B    24.66n    24.66n    22.09n    25.23n    33.36n  exp1 +10%
+  1024B    29.17n    29.69n    26.85n    29.44n    44.27n  exp1 +7%
+  2048B    55.25n    55.37n    53.80n    56.61n    93.61n  exp1 +2%
+  4096B   108.03n   107.96n   109.57n   112.86n   194.45n  base +0%
+  8192B   212.70n   212.73n   221.68n   224.24n   380.16n  rapid
+
+Legend:
+  rapid = rapidhash (baseline to beat)
+  base  = mh_bulk baseline (rapidhash pattern copy)
+  exp1  = 128-bit accumulation (simple finalization, may fail SMHasher)
+  exp2  = 128-bit accumulation with proper finalization (should pass SMHasher)
+  exp3  = 4-lane variant (64 bytes/iteration, less register pressure)
