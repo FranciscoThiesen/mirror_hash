@@ -141,9 +141,9 @@ std::uint64_t finalize_aes(uint8x16_t state) noexcept {
     return vgetq_lane_u64(v64, 0) ^ vgetq_lane_u64(v64, 1);
 }
 
-// AES-based hash for medium inputs (17-128 bytes)
+// AES-based hash for medium inputs (33-128 bytes)
 // Uses single-state with 32-byte unrolling and overlapping read for partial blocks
-// Optimized to beat rapidhash consistently across the entire 17-128 byte range
+// Optimized to beat rapidhash consistently across the entire 33-128 byte range
 [[gnu::noinline]]
 std::uint64_t hash_aes_medium(const void* key, std::size_t len, std::uint64_t seed) noexcept {
     const std::uint8_t* p = static_cast<const std::uint8_t*>(key);
@@ -179,10 +179,10 @@ std::uint64_t hash_aes_medium(const void* key, std::size_t len, std::uint64_t se
         len -= 16;
     }
 
-    // Handle 1-15 byte remainder with overlapping read (avoids expensive memcpy)
+    // Handle 1-15 byte remainder with overlapping read (avoids stack alloc + memcpy)
     if (len > 0) {
         // Read last 16 bytes overlapping with already-processed data
-        // This is safe since original_len >= 17 (we're in the 17-128 byte range)
+        // This is safe since original_len >= 33 (we're in the 33-128 byte range)
         uint8x16_t data = vld1q_u8(end - 16);
         // XOR with remainder length to differentiate from aligned reads
         uint8x16_t len_vec = vdupq_n_u8(static_cast<std::uint8_t>(len));
