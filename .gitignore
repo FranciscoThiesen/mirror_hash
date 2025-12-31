@@ -10,6 +10,9 @@ cmake-build-*/
 *.swo
 *~
 
+# macOS
+.DS_Store
+
 # Compiled files
 *.o
 *.obj
@@ -17,7 +20,7 @@ cmake-build-*/
 *.so
 *.dylib
 
-# Executables
+# Executables (common benchmark/test binaries)
 test_mirror_hash
 official_comparison
 policy_comparison
@@ -26,9 +29,31 @@ hash_quality_analysis
 example_basic
 example_custom_algo
 example_hashtable
+clean_comparison
+combined_optimal
+debug_cliff
+detailed_analysis
+final_blog_numbers
+final_optimized
+gap_benchmark
+minimal_aes
+optimal_hybrid
+profile_benchmark
+quality_test
+smhasher_core_tests
+verify_fix
+overlapping_read_test
+
+# Benchmark result files
+*_results.txt
+*_results.log
 
 # Claude configuration (project-specific)
 CLAUDE.md
 
-# External repositories (cloned for integration attempts)
+# Blog drafts (not for publication in repo)
+blog/
+
+# External repositories (large, clone separately if needed)
 smhasher_upstream/
+third_party/smhasher/
