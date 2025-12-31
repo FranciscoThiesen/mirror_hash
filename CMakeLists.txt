@@ -11,7 +11,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Optimization flags - aggressive optimization for benchmarks
+# Optimization flags
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -march=native -mtune=native -ffast-math -funroll-loops")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 
@@ -34,38 +34,10 @@ endif()
 # Benchmarks
 option(BUILD_BENCHMARKS "Build benchmarks" ON)
 if(BUILD_BENCHMARKS)
-    # Official comparison against wyhash, rapidhash, xxHash
-    add_executable(official_comparison benchmarks/official_comparison.cpp)
-    target_link_libraries(official_comparison PRIVATE mirror_hash)
-    target_include_directories(official_comparison PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
-
-    # Comprehensive benchmark (xxHash-style presentation)
-    add_executable(comprehensive_benchmark benchmarks/comprehensive_benchmark.cpp)
-    target_link_libraries(comprehensive_benchmark PRIVATE mirror_hash)
-    target_include_directories(comprehensive_benchmark PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
-
-    # Policy comparison between different hash algorithms
-    add_executable(policy_comparison benchmarks/policy_comparison.cpp)
-    target_link_libraries(policy_comparison PRIVATE mirror_hash)
-
-    # Quality verification tests
-    add_executable(quality_verification benchmarks/quality_verification.cpp)
-    target_link_libraries(quality_verification PRIVATE mirror_hash)
-
-    # SMHasher test suite (actual SMHasher algorithms)
-    add_executable(smhasher_tests benchmarks/smhasher_tests.cpp)
-    target_link_libraries(smhasher_tests PRIVATE mirror_hash)
-    target_include_directories(smhasher_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
-
-endif()
-
-# Quality Analysis
-option(BUILD_ANALYSIS "Build hash quality analysis" ON)
-if(BUILD_ANALYSIS)
-    add_executable(hash_quality_analysis analysis/run_analysis.cpp)
-    target_include_directories(hash_quality_analysis PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/analysis
-    )
+    # Main benchmark: mirror_hash vs rapidhash
+    add_executable(benchmark benchmarks/benchmark.cpp)
+    target_link_libraries(benchmark PRIVATE mirror_hash)
+    target_include_directories(benchmark PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/smhasher)
 endif()
 
 # Examples
